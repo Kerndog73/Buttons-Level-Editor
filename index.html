@@ -4,12 +4,56 @@
     <meta charset="UTF-8">
     <title>Level Editor</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="editor.css" />
+    <link rel="stylesheet" href="tools.css" />
+    <link rel="stylesheet" href="properties.css" />
+    <link rel="stylesheet" href="operations.css" />
     <script src="main.js"></script>
   </head>
   <body>
-    <div id="editor" class="area"></div>
-    <div id="tools" class="area"></div>
+    <div id="editor" class="area">
+      <canvas width="1024" height="576"></canvas>
+    </div>
+
+    <div id="tools" class="area">
+      <table>
+        <tbody>
+          <tr>
+            <td id="select_tool" title="Select">Select</td>
+            <td id="create_player_tool" title="Create player">Player</td>
+            <td id="create_exit_tool" title="Create exit">Exit</td>
+            <td id="create_platform_tool" title="Create platform">Platform</td>
+            <td id="create_box_tool" title="Create box">Box</td>
+            <td id="create_key_tool" title="Create key">Key</td>
+            <td id="create_lock_tool" title="Create lock">Lock</td>
+          </tr>
+          <tr>
+            <td id="create_button_tool" title="Create button">Button</td>
+            <td id="create_switch_tool" title="Create switch">Switch</td>
+            <td id="create_door_tool" title="Create door">Door</td>
+            <td id="create_moving_platform_tool" title="Create moving platform">Moving Platform</td>
+            <td id="create_laser_emitter_tool" title="Create laser emitter">Laser Emitter</td>
+            <td id="create_laser_detector_tool" title="Create laser detector">Laser Detector</td>
+            <td id="create_text" title="Create text">Text</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div id="properties" class="area"></div>
-    <div id="operations" class="area"></div>
+    <div id="operations" class="area">
+      <table>
+        <tbody>
+          <tr>
+            <td id="open_op" title="Open">Open</td>
+            <td id="save_op" title="Save">Save</td>
+          </tr>
+          <tr>
+            <td id="compile_op" title="Compile">Compile</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

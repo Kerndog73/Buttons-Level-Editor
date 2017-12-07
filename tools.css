@@ -1,0 +1,9 @@
+#tools td {
+  width: calc(100% / 7);
+  height: 50%;
+  background-color: yellow;
+}
+
+#tools td:hover {
+  background-color: aqua;
+}
