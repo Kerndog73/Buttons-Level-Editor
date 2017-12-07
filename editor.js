@@ -1,6 +1,8 @@
-let canvas, ctx;
+let canvasContainer, canvas, ctx;
 let entities = [];
 let mouseTile = [-1, -1];
+let canvasElementSize = [1, 1];
+
 const LEVEL = [32, 18];
 const TILE = [32, 32];
 const PIXELS = [LEVEL[0] * TILE[0], LEVEL[1] * TILE[1]];
@@ -24,32 +26,34 @@ $(document).ready(function() {
   let lastTime = performance.now();
   (function animate(time) {
     window.requestAnimationFrame(animate);
-    let delta = time - lastTime;
+    const delta = time - lastTime;
     lastTime = time;
     ctx.clearRect(0, 0, PIXELS[0], PIXELS[1]);
 
-    renderEntities(delta);
+    renderEntities();
     renderGrid();
     renderMouseHover();
   })();
 });
 
 function onWindowResize() {
-  let container = $("#editor");
   const canvasRatio = PIXELS[0] / PIXELS[1];
-  let containerRatio = container.width() / container.height();
+  let canvasContainerRatio = canvasContainer.width() / canvasContainer.height();
 
-  if (canvasRatio > containerRatio) {
+  if (canvasRatio > canvasContainerRatio) {
     canvas.css("left", "0");
-    canvas.css("top", (container.height() - canvas.height()) / 2 + "px");
-    canvas.width(container.width());
+    canvas.css("top", (canvasContainer.height() - canvas.height()) / 2 + "px");
+    canvas.width(canvasContainer.width());
     canvas.height("auto");
   } else {
-    canvas.css("left", (container.width() - canvas.width()) / 2 + "px");
+    canvas.css("left", (canvasContainer.width() - canvas.width()) / 2 + "px");
     canvas.css("top", "0");
     canvas.width("auto");
-    canvas.height(container.height());
+    canvas.height(canvasContainer.height());
   }
+
+  canvasElementSize[0] = canvas.width();
+  canvasElementSize[1] = canvas.height();
 }
 
 function onMouseLeave() {
@@ -57,18 +61,22 @@ function onMouseLeave() {
   mouseTile[1] = -1;
 }
 
+function tilePosFromPixelOffsetX(offsetX) {
+  return Math.floor(offsetX * PIXELS[0] / canvasElementSize[0] / TILE[0]);
+}
+
+function tilePosFromPixelOffsetY(offsetY) {
+  return Math.floor((PIXELS[1] - offsetY * PIXELS[1] / canvasElementSize[1]) / TILE[1]);
+}
+
 function onMouseMove(e) {
-  let x = e.offsetX;
-  let y = e.offsetY;
-  x *= PIXELS[0] / canvas.width();
-  y *= PIXELS[1] / canvas.height();
-  y = PIXELS[1] - y;
-  mouseTile[0] = Math.floor(x / TILE[0]);
-  mouseTile[1] = Math.floor(y / TILE[1]);
+  mouseTile[0] = tilePosFromPixelOffsetX(e.offsetX);
+  mouseTile[1] = tilePosFromPixelOffsetY(e.offsetY);
 }
 
 function setupCanvas() {
-  canvas = $("#editor canvas");
+  canvasContainer = $("#editor");
+  canvas = canvasContainer.children("canvas");
   canvas.attr("width", PIXELS[0]);
   canvas.attr("height", PIXELS[1]);
   ctx = canvas[0].getContext("2d");
@@ -84,8 +92,11 @@ function renderMouseHover() {
 }
 
 function renderGrid() {
-  ctx.save();
+  const transform = ctx.currentTransform;
+
   ctx.scale(1.0 / TILE[0], 1.0 / TILE[1]);
+
+  ctx.beginPath();
 
   ctx.strokeWidth = 2;
   ctx.strokeStyle = "#FFF";
@@ -102,10 +113,10 @@ function renderGrid() {
 
   ctx.stroke();
 
-  ctx.restore();
+  ctx.setTransform(transform.a, transform.b, transform.c, transform.d, transform.e, transform.f);
 }
 
-function renderEntities(delta) {
+function renderEntities() {
   for (let e in entities) {
 
   }
