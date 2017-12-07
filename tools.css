@@ -4,6 +4,6 @@
   background-color: yellow;
 }
 
-#tools td:hover {
-  background-color: aqua;
+.tool.enabled,  .tool:hover {
+  background-color: red !important;
 }
