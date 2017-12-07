@@ -1,5 +1,35 @@
-div {
+body {
+  margin: 0;
+}
+
+#tools {
+  position: fixed;
   background-color: red;
-  width: 100px;
-  height: 100px;
+  width: 80%;
+  height: 10%;
+}
+
+#editor {
+  position: fixed;
+  background-color: lime;
+  top: 10%;
+  width: 80%;
+  height: 90%;
+}
+
+#properties {
+  position: fixed;
+  background-color: blue;
+  top: 10%;
+  left: 80%;
+  width: 20%;
+  height: 90%;
+}
+
+#operations {
+  position: fixed;
+  background-color: cyan;
+  left: 80%;
+  width: 20%;
+  height: 10%;
 }
