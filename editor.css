@@ -1,8 +1,8 @@
 #editor canvas {
+  position: absolute;
   display: block;
   max-width: 100%;
   max-height: 100%;
-  vertical-align: middle;
   image-rendering: pixelated;
   background-color: brown;
 }
