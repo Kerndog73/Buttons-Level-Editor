@@ -3,9 +3,9 @@ let entities = [];
 let mouseTile = [-1, -1];
 let canvasElementSize = [1, 1];
 
-const LEVEL = [32, 18];
-const TILE = [32, 32];
-const PIXELS = [LEVEL[0] * TILE[0], LEVEL[1] * TILE[1]];
+const LEVEL = new Vec(32, 18);
+const TILE = new Vec(32, 32);
+const PIXELS = Vec.mul(LEVEL, TILE);
 
 $(document).ready(function() {
   setupCanvas();
@@ -25,7 +25,7 @@ $(document).ready(function() {
     window.requestAnimationFrame(animate);
     const delta = time - lastTime;
     lastTime = time;
-    ctx.clearRect(0, 0, PIXELS[0], PIXELS[1]);
+    ctx.clearRect(0, 0, PIXELS.x, PIXELS.y);
 
     renderEntities();
     renderGrid();
@@ -34,7 +34,7 @@ $(document).ready(function() {
 });
 
 function onWindowResize() {
-  const canvasRatio = PIXELS[0] / PIXELS[1];
+  const canvasRatio = PIXELS.x / PIXELS.y;
   let canvasContainerRatio = canvasContainer.width() / canvasContainer.height();
 
   if (canvasRatio > canvasContainerRatio) {
@@ -59,11 +59,11 @@ function onMouseLeave() {
 }
 
 function tilePosFromPixelOffsetX(offsetX) {
-  return Math.floor(offsetX * PIXELS[0] / canvasElementSize[0] / TILE[0]);
+  return Math.floor(offsetX * PIXELS.x / canvasElementSize[0] / TILE.x);
 }
 
 function tilePosFromPixelOffsetY(offsetY) {
-  return Math.floor((PIXELS[1] - offsetY * PIXELS[1] / canvasElementSize[1]) / TILE[1]);
+  return Math.floor((PIXELS.y - offsetY * PIXELS.y / canvasElementSize[1]) / TILE.y);
 }
 
 function onMouseMove(e) {
@@ -82,11 +82,11 @@ function onMouseUp() {
 function setupCanvas() {
   canvasContainer = $("#editor");
   canvas = canvasContainer.children("canvas");
-  canvas.attr("width", PIXELS[0]);
-  canvas.attr("height", PIXELS[1]);
+  canvas.attr("width", PIXELS.x);
+  canvas.attr("height", PIXELS.y);
   ctx = canvas[0].getContext("2d");
-  ctx.translate(0, PIXELS[1]);
-  ctx.scale(TILE[0], -TILE[1]);
+  ctx.translate(0, PIXELS.y);
+  ctx.scale(TILE.x, -TILE.y);
 }
 
 function renderMouseHover() {
@@ -99,21 +99,21 @@ function renderMouseHover() {
 function renderGrid() {
   const transform = ctx.currentTransform;
 
-  ctx.scale(1.0 / TILE[0], 1.0 / TILE[1]);
+  ctx.scale(1.0 / TILE.x, 1.0 / TILE.y);
 
   ctx.beginPath();
 
   ctx.strokeWidth = 2;
   ctx.strokeStyle = "#FFF";
 
-  for (let x = TILE[0]; x < PIXELS[0]; x += TILE[0]) {
+  for (let x = TILE.x; x < PIXELS.x; x += TILE.x) {
     ctx.moveTo(x, 0);
-    ctx.lineTo(x, PIXELS[1]);
+    ctx.lineTo(x, PIXELS.y);
   }
 
-  for (let y = TILE[1]; y < PIXELS[1]; y += TILE[1]) {
+  for (let y = TILE.y; y < PIXELS.y; y += TILE.y) {
     ctx.moveTo(0, y);
-    ctx.lineTo(PIXELS[0], y);
+    ctx.lineTo(PIXELS.x, y);
   }
 
   ctx.stroke();
