@@ -72,11 +72,11 @@ function onMouseMove(e) {
 }
 
 function onMouseDown() {
-  enabledTool.onMouseDown(mouseTile);
+  enabledTool.onMouseDown(new Vec(mouseTile[0], mouseTile[1]));
 }
 
 function onMouseUp() {
-  enabledTool.onMouseUp(mouseTile);
+  enabledTool.onMouseUp(new Vec(mouseTile[0], mouseTile[1]));
 }
 
 function setupCanvas() {
