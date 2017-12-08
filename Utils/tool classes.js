@@ -1,6 +1,6 @@
 class Tool {};
 
-class SelectTool extends Tool {
+window.SelectTool = class SelectTool extends Tool {
   constructor() {
     super();
     this.startTile = new Vec(0, 0);
@@ -12,6 +12,6 @@ class SelectTool extends Tool {
 
   onMouseUp(tile) {
     let rect = new Rect(this.startTile, tile);
-    console.log(rect);
+    entities.findInRect(rect);
   }
 };

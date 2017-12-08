@@ -1,11 +1,12 @@
-let canvasContainer, canvas, ctx;
-let entities = [];
-let mouseTile = [-1, -1];
-let canvasElementSize = [1, 1];
-
+const MOUSE_OUT = new Vec(-1, -1);
 const LEVEL = new Vec(32, 18);
 const TILE = new Vec(32, 32);
 const PIXELS = Vec.mul(LEVEL, TILE);
+
+let canvasContainer, canvas, ctx;
+let entities = new Entities();
+let mouseTile = MOUSE_OUT.clone();
+let canvasElementSize = new Vec(1, 1);
 
 $(document).ready(function() {
   setupCanvas();
@@ -36,47 +37,41 @@ $(document).ready(function() {
 function onWindowResize() {
   const canvasRatio = PIXELS.x / PIXELS.y;
   let canvasContainerRatio = canvasContainer.width() / canvasContainer.height();
+  canvasElementSize.x = canvas.width();
+  canvasElementSize.y = canvas.height();
 
   if (canvasRatio > canvasContainerRatio) {
     canvas.css("left", "0");
-    canvas.css("top", (canvasContainer.height() - canvas.height()) / 2 + "px");
+    canvas.css("top", (canvasContainer.height() - canvasElementSize.y) / 2 + "px");
     canvas.width(canvasContainer.width());
     canvas.height("auto");
   } else {
-    canvas.css("left", (canvasContainer.width() - canvas.width()) / 2 + "px");
+    canvas.css("left", (canvasContainer.width() - canvasElementSize.x) / 2 + "px");
     canvas.css("top", "0");
     canvas.width("auto");
     canvas.height(canvasContainer.height());
   }
-
-  canvasElementSize[0] = canvas.width();
-  canvasElementSize[1] = canvas.height();
 }
 
 function onMouseLeave() {
-  mouseTile[0] = -1;
-  mouseTile[1] = -1;
-}
-
-function tilePosFromPixelOffsetX(offsetX) {
-  return Math.floor(offsetX * PIXELS.x / canvasElementSize[0] / TILE.x);
-}
-
-function tilePosFromPixelOffsetY(offsetY) {
-  return Math.floor((PIXELS.y - offsetY * PIXELS.y / canvasElementSize[1]) / TILE.y);
+  mouseTile.copy(MOUSE_OUT);
 }
 
 function onMouseMove(e) {
-  mouseTile[0] = tilePosFromPixelOffsetX(e.offsetX);
-  mouseTile[1] = tilePosFromPixelOffsetY(e.offsetY);
+  mouseTile.x = e.offsetX;
+  mouseTile.y = e.offsetY;
+  mouseTile.mul(PIXELS);
+  mouseTile.div(canvasElementSize);
+  mouseTile.y = PIXELS.y - mouseTile.y;
+  mouseTile.div(TILE);
 }
 
 function onMouseDown() {
-  enabledTool.onMouseDown(new Vec(mouseTile[0], mouseTile[1]));
+  enabledTool.onMouseDown(mouseTile.clone());
 }
 
 function onMouseUp() {
-  enabledTool.onMouseUp(new Vec(mouseTile[0], mouseTile[1]));
+  enabledTool.onMouseUp(mouseTile.clone());
 }
 
 function setupCanvas() {
@@ -90,7 +85,7 @@ function setupCanvas() {
 }
 
 function renderMouseHover() {
-  if (mouseTile[0] != -1 && mouseTile[1] != -1) {
+  if (!mouseTile.eq(MOUSE_OUT)) {
     ctx.fillStyle = "rgba(127, 127, 127, 0.4)";
     ctx.fillRect(mouseTile[0], mouseTile[1], 1, 1);
   }
@@ -122,7 +117,7 @@ function renderGrid() {
 }
 
 function renderEntities() {
-  for (let e in entities) {
+  entities.foreach(e => {
 
-  }
+  });
 }
