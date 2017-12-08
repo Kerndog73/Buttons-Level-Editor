@@ -12,14 +12,13 @@ $(document).ready(function() {
 
   $(window).resize(onWindowResize);
   //The window resize event doesn't always fire when the window is resized
-  setInterval(
-    onWindowResize,
-    500
-  );
+  setInterval(onWindowResize, 500);
   onWindowResize();
 
   canvas.mouseleave(onMouseLeave);
   canvas.mousemove(onMouseMove);
+  canvas.mousedown(onMouseDown);
+  canvas.mouseup(onMouseUp);
 
   let lastTime = performance.now();
   (function animate(time) {
@@ -70,6 +69,14 @@ function tilePosFromPixelOffsetY(offsetY) {
 function onMouseMove(e) {
   mouseTile[0] = tilePosFromPixelOffsetX(e.offsetX);
   mouseTile[1] = tilePosFromPixelOffsetY(e.offsetY);
+}
+
+function onMouseDown() {
+  enabledTool.onMouseDown(mouseTile);
+}
+
+function onMouseUp() {
+  enabledTool.onMouseUp(mouseTile);
 }
 
 function setupCanvas() {
