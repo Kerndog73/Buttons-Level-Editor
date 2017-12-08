@@ -4,7 +4,7 @@ class Entities {
   }
 
   foreach(callback) {
-    for (let e in this._entities) {
+    for (let e of this._entities) {
       callback(e);
     }
   }

@@ -42,6 +42,11 @@ class Vec {
     this.y /= other.y;
   }
 
+  call(fun) {
+    this.x = fun(this.x);
+    this.y = fun(this.y);
+  }
+
   static add(a, b) {
     return new Vec(a.x + b.x, a.y + b.y);
   }

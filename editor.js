@@ -64,6 +64,7 @@ function onMouseMove(e) {
   mouseTile.div(canvasElementSize);
   mouseTile.y = PIXELS.y - mouseTile.y;
   mouseTile.div(TILE);
+  mouseTile.call(Math.floor);
 }
 
 function onMouseDown() {
@@ -87,7 +88,7 @@ function setupCanvas() {
 function renderMouseHover() {
   if (!mouseTile.eq(MOUSE_OUT)) {
     ctx.fillStyle = "rgba(127, 127, 127, 0.4)";
-    ctx.fillRect(mouseTile[0], mouseTile[1], 1, 1);
+    ctx.fillRect(mouseTile.x, mouseTile.y, 1, 1);
   }
 }
 
