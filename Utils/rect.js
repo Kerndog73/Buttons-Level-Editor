@@ -20,6 +20,10 @@ class Rect {
     );
   }
 
+  validate() {
+    this.copy(this.clone());
+  }
+
   interceptsWith(other) {
     return this.min.x     < other.max.x + 1 &&
            this.min.y     < other.max.y + 1 &&

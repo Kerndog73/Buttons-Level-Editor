@@ -1,9 +1,3 @@
-class Entity {
-  constructor(type, pos) {
-    this.rect = new Rect(pos.clone(), pos.clone());
-  }
-};
-
 class Entities {
   constructor() {
     this._entities = [];
@@ -22,7 +16,7 @@ class Entities {
   findInRect(rect) {
     let list = [];
     for (let e in this._entities) {
-      if (e.rect.interceptsWith(rect)) {
+      if (e.getRect().interceptsWith(rect)) {
         list.push(e);
       }
     }
