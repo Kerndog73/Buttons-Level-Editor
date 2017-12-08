@@ -47,15 +47,14 @@
             <td id="open_op" title="Open">Open</td>
             <td id="save_op" title="Save">Save</td>
           </tr>
-          <tr>
-            <td id="compile_op" title="Compile">Compile</td>
-            <td></td>
-          </tr>
         </tbody>
       </table>
+      <input id="file_opener" class="hidden" type="file" accept=".jsonnet" />
+      <a id="file_saver" class="hidden" download="My level.json"></a>
     </div>
 
     <script src="Libraries/jquery-3.2.1.min.js"></script>
+    <script src="Libraries/libjsonnet.js"></script>
     <script src="main.js"></script>
     <script src="editor.js"></script>
     <script src="tools.js"></script>

@@ -8,8 +8,6 @@ const TILE = [32, 32];
 const PIXELS = [LEVEL[0] * TILE[0], LEVEL[1] * TILE[1]];
 
 $(document).ready(function() {
-  console.log("Ready");
-
   setupCanvas();
 
   $(window).resize(onWindowResize);
