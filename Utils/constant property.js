@@ -3,8 +3,6 @@ function makeConstProp(obj, name, val) {
     configurable: false,
     enumerable: false,
     value: val,
-    writable: false,
-    get: undefined,
-    set: undefined
+    writable: false
   });
 }

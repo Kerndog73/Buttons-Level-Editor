@@ -5,189 +5,253 @@ makeConstProp(Orient, "DOWN", 2);
 makeConstProp(Orient, "LEFT", 3);
 
 let PropType = {};
-makeConstProp(PropType, "NONE", 0)
-makeConstProp(PropType, "NUMBER", 1);
-makeConstProp(PropType, "VEC", 2);
-makeConstProp(PropType, "ORIENT", 3);
-makeConstProp(PropType, "ID", 4);
+makeConstProp(PropType, "NONE", 0);
+makeConstProp(PropType, "FLOAT", 1);
+makeConstProp(PropType, "UINT", 2);
+makeConstProp(PropType, "VEC", 3);
+makeConstProp(PropType, "ORIENT", 4);
 makeConstProp(PropType, "STRING", 5);
+makeConstProp(PropType, "ARRAY", 6);
+makeConstProp(PropType, "BOOL", 7);
+
+function isUint(value) {
+  return typeof(value) === "number" && value === (value | 0) && value >= 0;
+}
 
 function isType(propType, prop) {
   switch (propType) {
     case PropType.NONE:
       return prop === undefined;
-    case PropType.NUMBER:
+    case PropType.FLOAT:
       return typeof(prop) === "number";
+    case PropType.UINT:
+      return isUint(prop);
     case PropType.VEC:
-      return prop instanceof Vec;
+      return prop instanceof Vec && isUint(prop.x) && isUint(prop.y);
     case PropType.ORIENT:
-      return typeof(prop) === "number" &&
-             prop === (prop | 0) &&
-             0 <= prop && prop <= 3;
-    case PropType.ID:
-      return typeof(prop) === "number" && prop === (prop | 0);
+      return isUint(prop) && 0 <= prop && prop <= 3;
     case PropType.STRING:
       return typeof(prop) === "string";
+    case PropType.ARRAY:
+      return prop instanceof Array && prop.every(isUint);
+    case PropType.BOOLEAN:
+      return typeof(prop) === "boolean";
+    default:
+      console.error("Invalid property type", propType);
+      return false;
   }
-}
+};
 
-const positionImpl = {
-  getRect: function(props) {
+const posDef = new Map([
+  ["pos", PropType.VEC]
+]);
+
+const posSizeDef = new Map([
+  ["pos", PropType.VEC],
+  ["size", PropType.VEC]
+]);
+
+const indexDef = new Map([
+  ["index", PropType.UINT]
+]);
+
+const idDef = new Map([
+  ["id", PropType.UINT]
+]);
+
+const orientDef = new Map([
+  ["orient", PropType.ORIENT]
+]);
+
+const inputDef = new Map([
+  ["active", PropType.BOOL],
+  ["in", PropType.ARRAY],
+  ["on", PropType.BOOL],
+  ["operator", PropType.STRING]
+]);
+
+const doorDef = new Map([
+  ["height", PropType.UINT]
+]);
+
+const rangeDef = new Map([
+  ["start", PropType.VEC],
+  ["end", PropType.VEC]
+]);
+
+const movingPlatformDef = new Map([
+  ["size", PropType.VEC],
+  ["speed", PropType.FLOAT],
+  ["waiting time", PropType.FLOAT]
+]);
+
+const detectorDef = new Map([
+  ["emitter", PropType.UINT]
+]);
+
+const textDef = new Map([
+  ["font size", PropType.UINT],
+  ["text", PropType.STRING]
+]);
+
+class EntityRect {
+  getRect(props) {
+    console.error("EntityRect::getRect not implemented for ", this);
+  }
+  setRect(props, newRect) {
+    console.error("EntityRect::setRect not implemented for ", this);
+  }
+};
+
+class PosRect {
+  getRect(props) {
     if (props.hasOwnProperty("pos")) {
       return new Rect(props.pos, props.pos);
     } else {
       return new Rect(Vec.ZERO, Vec.ZERO);
     }
-  },
-  setRect: function(props, newRect) {
+  }
+  setRect(props, newRect) {
     // Rect constructor ensures that min <= max
     const rect = newRect.clone();
     props.pos = rect.min;
-  },
-  getPropType(name) {
-    if (name == "pos") {
-      return PropType.VEC;
-    } else {
-      return PropType.NONE;
-    }
-  },
-  setProp(props, name, value) {
-    if (name == "pos" && value instanceof Vec) {
-      props.pos = value;
-    } else {
-      return false;
-    }
-    return true;
   }
 };
+makeConstProp(PosRect, "VAL", new PosRect());
 
-const positionSizeImpl = {
-  getRect: function(props) {
+class PosSizeRect {
+  getRect(props) {
     let pos = new Vec(0, 0);
     if (props.hasOwnProperty("pos")) {
       pos = props.pos;
     }
     let size = new Vec(1, 1);
-    if (props.hasOwnProperty("size")) {
+    if (props.hasOwnerProperty("size")) {
       size = props.size;
     }
     return new Rect(pos, Vec.sub(Vec.add(pos, size), Vec.ONE));
-  },
-  setRect: function(props, newRect) {
-    // Rect constructor ensures that min <= max
-    let rect = newRect.clone();
+  }
+  setRect(props, newRect) {
+    const rect = newRect.clone();
     this.pos = rect.min;
     this.size = rect.size();
-  },
-  getPropType: function(name) {
-    if (name == "pos" || name == "size") {
-      return PropType.VEC;
-    } else {
-      return PropType.NONE;
-    }
-  },
-  setProp: function(props, name, value) {
-    if (name == "pos" && value instanceof Vec) {
-      props.pos = value;
-    } else if (name == "size" && value instanceof Vec) {
-      props.size = value;
-    } else {
-      return false;
-    }
-    return true;
   }
 };
+makeConstProp(PosSizeRect, "VAL", new PosSizeRect());
 
-const indexImpl = {
-  getPropType: function(name) {
-    if (name == "index") {
-      return PropType.NUMBER;
-    } else {
-      return PropType.NUMBER;
+//@FIXME this is identical to PosSizeRect except that "pos" has been renamed to "start"
+class MovingPlatformRect {
+  getRect(props) {
+    let pos = new Vec(0, 0);
+    if (props.hasOwnProperty("start")) {
+      pos = props.pos;
     }
-  },
-  setProp: function(props, name, value) {
-    if (name == "index" && typeof value == "number") {
-      props.index = value;
-    } else {
-      return false;
+    let size = new Vec(1, 1);
+    if (props.hasOwnerProperty("size")) {
+      size = props.size;
     }
-    return true;
+    return new Rect(pos, Vec.sub(Vec.add(pos, size), Vec.ONE));
+  }
+  setRect(props, newRect) {
+    const rect = newRect.clone();
+    this.start = rect.min;
+    this.size = rect.size();
   }
 };
+makeConstProp(MovingPlatformRect, "VAL", new MovingPlatformRect());
 
-const lockImpl = {
-
+function mergeMaps(maps) {
+  let result = new Map();
+  for (let map of maps) {
+    map.forEach(function(value, key) {
+      result.set(key, value);
+    });
+  }
+  return result;
 }
 
 class Entity {
-  constructor(name, ...impls) {
+  constructor(name, rect, ...defs) {
     this.props = {};
+    makeConstProp(this, "rect", rect);
     makeConstProp(this, "name", name);
-    makeConstProp(this, "impls", impls);
+    makeConstProp(this, "defs", mergeMaps(defs));
   }
 
   getName() {
     return this.name;
   }
   getRect() {
-    for (let impl in impls) {
-      if (impl.hasOwnProperty("getRect")) {
-        return impl.getRect(this.props);
-      }
-    }
-    return new Rect(Vec.ZERO, Vec.ZERO);
+    return rect.getRect(this.props);
   }
   setRect(newRect) {
-    for (let impl in impls) {
-      if (impl.hasOwnProperty("setRect")) {
-        return impl.setRect(this.props, newRect);
-      }
-    }
+    rect.setRect(this.props, newRect);
   }
   getPropType(name) {
-    for (let impl in impls) {
-      if (impl.hasOwnProperty("getPropType")) {
-        const type = impl.getPropType(name);
-        if (type != PropType.NONE) {
-          return type;
-        }
-      }
+    const type = this.defs.get(name);
+    if (type === undefined) {
+      return PropType.NONE;
+    } else {
+      return type;
     }
-    return PropType.NONE;
   }
   setProp(name, value) {
-    for (let impl in impls) {
-      if (impl.hasOwnProperty("setProp")) {
-        if (impl.setProp(props, name, value)) {
-          return true;
-        }
-      }
+    const type = this.defs.get(name);
+    if (type !== undefined && isType(value)) {
+      this.props[name] = value;
+      return true;
+    } else {
+      return false;
     }
-    return false;
   }
 };
 
-function makePlayer() {
-  return new Entity("Player", positionImpl);
-}
-
-function makeExit() {
-  return new Entity("Exit", positionImpl);
-}
-
-function makePlatform() {
-  return new Entity("Platform", positionSizeImpl);
-}
-
-function makeBox() {
-  return new Entity("Box", positionSizeImpl);
-}
-
-function makeKey() {
-  return new Entity("Key", positionImpl, indexImpl);
-}
-
-function makeLock() {
-  return new Entity("Lock", positionImpl, indexImpl, idImpl);
+function makeEntity(type) {
+  const factories = {
+    Player: function() {
+      return new Entity("Player", PosRect.VAL, posDef);
+    },
+    Exit: function() {
+      return new Entity("Exit", PosRect.VAL, posDef);
+    },
+    Platform: function() {
+      return new Entity("Platform", PosSizeRect.VAL, posSizeDef);
+    },
+    Box: function() {
+      return new Entity("Box", PosSizeRect.VAL, posSizeDef);
+    },
+    Key: function() {
+      return new Entity("Key", PosRect.VAL, posDef, indexDef);
+    },
+    Lock: function() {
+      return new Entity("Lock", PosRect.VAL, posDef, indexDef, idDef);
+    },
+    Button: function() {
+      return new Entity("Button", PosRect.VAL, posDef, orientDef, idDef);
+    },
+    Switch: function() {
+      return new Entity("Switch", PosRect.VAL, posDef, orientDef, idDef);
+    },
+    Door: function() {
+      return new Entity("Door", PosRect.VAL, doorDef, posDef, orientDef, inputDef);
+    },
+    MovingPlatform: function() {
+      return new Entity("MovingPlatform", MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
+    },
+    LaserEmitter: function() {
+      return new Entity("LaserEmitter", PosRect.VAL, posDef, rangeDef, idDef, inputDef);
+    },
+    LaserDetector: function() {
+      return new Entity("LaserDetector", PosRect.VAL, detectorDef, posDef, idDef);
+    },
+    Text: function() {
+      return new Enttiy("Text", PosRect.VAL, textDef, posDef);
+    }
+  };
+  if (factories.hasOwnProperty(type)) {
+    return factories[type]();
+  } else {
+    console.error("Invalid entity type:", type);
+    return null;
+  }
 }
