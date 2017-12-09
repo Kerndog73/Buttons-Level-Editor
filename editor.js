@@ -101,7 +101,7 @@ function renderGrid() {
 
   ctx.beginPath();
 
-  ctx.strokeWidth = 2;
+  ctx.lineWidth = 2;
   ctx.strokeStyle = "#FFF";
 
   for (let x = TILE.x; x < PIXELS.x; x += TILE.x) {

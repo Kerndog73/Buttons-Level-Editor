@@ -7,6 +7,32 @@ function renderCircle(ctx, x, y, r) {
   ctx.ellipse(x, y, r, r, 0.0, 0.0, 2 * Math.PI, false);
 }
 
+function renderPolygon(ctx, sides, radius, rotation) {
+  if (sides !== (sides | 0) || sides < 1) {
+    console.error("Invalid number of sides", sides);
+  }
+
+  let angle = rotation;
+  const sideAngle = 2.0 * Math.PI / sides;
+  ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+  for (let s = 1; s !== sides; ++s) {
+    angle += sideAngle;
+    ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+  }
+}
+
+function orientTransform(ctx, orient) {
+  ctx.rotate(Math.PI / 2.0 * orient);
+}
+
+function getOr(props, name, alternative) {
+  if (props.hasOwnProperty(name)) {
+    return props[name];
+  } else {
+    return alternative;
+  }
+}
+
 function renderPlayer(ctx, props) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(255, 255, 255)";
@@ -36,22 +62,8 @@ function renderBox(ctx, props) {
   ctx.fillRect(0, 0, 1, 1);
 }
 
-function renderPolygon(ctx, sides, radius, rotation) {
-  if (sides !== (sides | 0) || sides < 1) {
-    console.error("Invalid number of sides", sides);
-  }
-
-  let angle = rotation;
-  const sideAngle = 2.0 * Math.PI / sides;
-  ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
-  for (let s = 1; s !== sides; ++s) {
-    angle += sideAngle;
-    ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
-  }
-}
-
 function renderKey(ctx, props) {
-  const sides = props.hasOwnProperty("index") ? (props.index + 1) : 3;
+  const sides = getOr(props, "index", 0) + 3;
   ctx.translate(0.5, 0.5);
   ctx.beginPath();
   ctx.fillStyle = "rgb(0, 255, 0)";
@@ -60,7 +72,7 @@ function renderKey(ctx, props) {
 }
 
 function renderLock(ctx, props) {
-  const sides = props.hasOwnProperty("index") ? (props.index + 1) : 3;
+  const sides = getOr(props, "index", 0) + 3;
   //clockwise
   ctx.beginPath();
   ctx.moveTo(0, 0);
@@ -78,6 +90,8 @@ function renderLock(ctx, props) {
 }
 
 function renderButton(ctx, props) {
+  orientTransform(ctx, getOr(props, "orient", Orient.UP));
+
   ctx.beginPath();
   ctx.fillStyle = "rgb(255, 0, 0)";
   ctx.fillRect(0.125, 0.0, 0.75, 0.25);
@@ -88,6 +102,8 @@ function renderButton(ctx, props) {
 }
 
 function renderSwitch(ctx, props) {
+  orientTransform(ctx, getOr(props, "orient", Orient.UP));
+
   ctx.beginPath();
   ctx.fillStyle = "rgb(80, 80, 80)";
   ctx.fillRect(0, 0, 1, 0.25);
@@ -100,4 +116,58 @@ function renderSwitch(ctx, props) {
   ctx.fillStyle = "rgb(255, 0, 0)";
   renderCircle(ctx, 0.5, 1.0, 0.2);
   ctx.fill();
+}
+
+function renderDoor(ctx, props) {
+  orientTransform(ctx, getOr(props, "orient", Orient.UP));
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(0, 0, 255)";
+  ctx.fillRect(0.25, 0.0, 0.5, getOr(props, "height", 1));
+}
+
+function renderMovingPlatform(ctx, props) {
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(127, 127, 127)";
+  ctx.fillRect(0, 0, 1, 1);
+}
+
+function renderLaserEmitter(ctx, props) {
+  const scale = new Vec(32, 32);
+  const start = Vec.mul(scale, getOr(props, "start", Vec.ZERO));
+  const end = Vec.mul(scale, getOr(props, "end", Vec.ZERO));
+
+  ctx.scale(1.0 / scale.x, 1.0 / scale.y);
+  orientTransform(ctx, getOr(props, "orient", Orient.UP));
+  ctx.beginPath();
+  ctx.moveTo(start.x, start.y);
+  ctx.lineTo(end.x, end.y);
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgb(255, 0, 0)";
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(1, 0);
+  ctx.lineTo(0.5, 1);
+  ctx.closePath();
+  ctx.fillStyle = "rgb(63, 63, 63)";
+  ctx.fill();
+}
+
+function renderLaserDetector(ctx, props) {
+  orientTransform(ctx, getOr(props, "orient", Orient.UP));
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(63, 63, 63)";
+  ctx.fillRect(0, 0, 1, 0.25);
+}
+
+function renderText(ctx, props) {
+  ctx.beginPath();
+  ctx.font = getOr(props, "font size", 32) + "px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseLine = "middle";
+  ctx.direction = "ltr";
+  ctx.fillStyle = "rgb(255, 255, 255)";
+  ctx.scale(0.03, -0.03);
+  ctx.fillText(getOr(props, "text", ""), 0, 0);
 }

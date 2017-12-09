@@ -80,19 +80,19 @@ const FACTORIES = {
     return new Entity("Switch", renderSwitch, PosRect.VAL, posDef, orientDef, idDef);
   },
   Door: function() {
-    return new Entity("Door", null, PosRect.VAL, doorDef, posDef, orientDef, inputDef);
+    return new Entity("Door", renderDoor, PosRect.VAL, doorDef, posDef, orientDef, inputDef);
   },
   MovingPlatform: function() {
-    return new Entity("MovingPlatform", null, MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
+    return new Entity("MovingPlatform", renderMovingPlatform, MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
   },
   LaserEmitter: function() {
-    return new Entity("LaserEmitter", null, PosRect.VAL, posDef, rangeDef, idDef, inputDef);
+    return new Entity("LaserEmitter", renderLaserEmitter, MovingPlatformRect.VAL, posDef, rangeDef, idDef, inputDef);
   },
   LaserDetector: function() {
-    return new Entity("LaserDetector", null, PosRect.VAL, detectorDef, posDef, idDef);
+    return new Entity("LaserDetector", renderLaserDetector, PosRect.VAL, detectorDef, posDef, idDef);
   },
   Text: function() {
-    return new Entity("Text", null, PosRect.VAL, textDef, posDef);
+    return new Entity("Text", renderText, PosRect.VAL, textDef, posDef);
   }
 };
 

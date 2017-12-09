@@ -11,6 +11,6 @@ $(document).ready(function() {
       names[i] = str[0].toUpperCase() + str.substr(1)
     });
     toolName = toolName.join("");
-    enabledTool = new window[toolName];
+    enabledTool = new window[toolName];  
   });
 });
