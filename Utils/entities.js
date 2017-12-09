@@ -17,7 +17,7 @@ class Entities {
 
   findInRect(rect) {
     let list = [];
-    for (let e in this._entities) {
+    for (let e of this._entities) {
       if (e.getRect().interceptsWith(rect)) {
         list.push(e);
       }

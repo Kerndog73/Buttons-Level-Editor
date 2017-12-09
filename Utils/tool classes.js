@@ -16,7 +16,7 @@ window.SelectTool = class extends Tool {
 
   onMouseUp(tile) {
     const rect = new Rect(this.startTile, tile);
-    entities.findInRect(rect);
+    properties.setList(entities.findInRect(rect));
   }
 };
 
