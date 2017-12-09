@@ -65,6 +65,8 @@ function onMouseMove(e) {
   mouseTile.y = PIXELS.y - mouseTile.y;
   mouseTile.div(TILE);
   mouseTile.call(Math.floor);
+
+  enabledTool.onMouseMove(mouseTile.clone());
 }
 
 function onMouseDown() {
