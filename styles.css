@@ -35,13 +35,6 @@ body {
   height: 10%;
 }
 
-.area > table {
-  width: 100%;
-  height: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
 .hidden {
   display: none;
 }

@@ -1,0 +1,38 @@
+#properties table {
+  margin-bottom: 10px;
+  width: calc(100% - 8px);
+  display: block;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: black 4px solid;
+}
+
+#properties table tr {
+  border-bottom: black 4px solid;
+}
+
+#properties table tr:last-child {
+  border-bottom: none;
+}
+
+#properties table tr td {
+
+}
+
+#properties input, #properties td {
+  padding: 0;
+}
+
+/* Key text boxes*/
+#properties table .key_input {
+  box-sizing: content-box;
+  display: block;
+  width: calc(100% - 4px);
+  height: 100%;
+}
+
+/*String text boxes*/
+#properties table .val_string {
+  box-sizing: content-box;
+  width: calc(100% - 4px);
+}
