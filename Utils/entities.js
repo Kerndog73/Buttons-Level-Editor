@@ -3,9 +3,9 @@ class Entities {
     this._entities = [];
   }
 
-  foreach(callback) {
+  render(ctx) {
     for (let e of this._entities) {
-      callback(e);
+      e.render(ctx);
     }
   }
 

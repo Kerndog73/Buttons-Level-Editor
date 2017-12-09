@@ -119,46 +119,54 @@ class PosRect {
 };
 makeConstProp(PosRect, "VAL", new PosRect());
 
-class PosSizeRect {
-  getRect(props) {
-    let pos = new Vec(0, 0);
-    if (props.hasOwnProperty("pos")) {
-      pos = props.pos;
+function makePosSizeRect(name, posName) {
+  window[name] = class {
+    getRect(props) {
+      let pos = new Vec(0, 0);
+      if (props.hasOwnProperty(posName)) {
+        pos = props[posName];
+      }
+      let size = new Vec(1, 1);
+      if (props.hasOwnProperty("size")) {
+        size = props.size;
+      }
+      return new Rect(pos, Vec.sub(Vec.add(pos, size), Vec.ONE));
     }
-    let size = new Vec(1, 1);
-    if (props.hasOwnerProperty("size")) {
-      size = props.size;
-    }
-    return new Rect(pos, Vec.sub(Vec.add(pos, size), Vec.ONE));
-  }
-  setRect(props, newRect) {
-    const rect = newRect.clone();
-    this.pos = rect.min;
-    this.size = rect.size();
-  }
-};
-makeConstProp(PosSizeRect, "VAL", new PosSizeRect());
 
-//@FIXME this is identical to PosSizeRect except that "pos" has been renamed to "start"
-class MovingPlatformRect {
-  getRect(props) {
-    let pos = new Vec(0, 0);
-    if (props.hasOwnProperty("start")) {
-      pos = props.pos;
+    setRect(props, newRect) {
+      const rect = newRect.clone();
+      props[posName] = rect.min;
+      props.size = rect.size();
     }
-    let size = new Vec(1, 1);
-    if (props.hasOwnerProperty("size")) {
-      size = props.size;
-    }
-    return new Rect(pos, Vec.sub(Vec.add(pos, size), Vec.ONE));
-  }
-  setRect(props, newRect) {
-    const rect = newRect.clone();
-    this.start = rect.min;
-    this.size = rect.size();
-  }
-};
-makeConstProp(MovingPlatformRect, "VAL", new MovingPlatformRect());
+  };
+  makeConstProp(window[name], "VAL", new window[name]());
+}
+
+makePosSizeRect("PosSizeRect", "pos");
+makePosSizeRect("MovingPlatformRect", "start");
+
+function renderPlayer(ctx) {
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(255, 255, 255)";
+  ctx.ellipse(0.5, 0.5, 0.5, 0.5, 0, 0, 2 * Math.PI, false);
+  ctx.fill();
+}
+
+function renderExit(ctx) {
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(0, 0, 255)";
+  ctx.fillRect(0, 0, 1, 1);
+
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(127, 127, 255)";
+  ctx.fillRect(0.25, 0.25, 0.5, 0.5);
+}
+
+function renderPlatform(ctx) {
+  ctx.beginPath();
+  ctx.fillStyle = "rgb(63, 63, 63)";
+  ctx.fillRect(0, 0, 1, 1);
+}
 
 function mergeMaps(maps) {
   let result = new Map();
@@ -171,10 +179,11 @@ function mergeMaps(maps) {
 }
 
 class Entity {
-  constructor(name, rect, ...defs) {
+  constructor(name, renderer, rect, ...defs) {
     this.props = {};
-    makeConstProp(this, "rect", rect);
     makeConstProp(this, "name", name);
+    makeConstProp(this, "renderer", renderer);
+    makeConstProp(this, "rect", rect);
     makeConstProp(this, "defs", mergeMaps(defs));
   }
 
@@ -204,47 +213,56 @@ class Entity {
       return false;
     }
   }
+  render(ctx) {
+    const mat = ctx.currentTransform;
+    const rect = this.getRect();
+    const size = rect.size();
+    ctx.translate(rect.min.x, rect.min.y);
+    ctx.scale(size.x, size.y);
+    this.renderer(ctx);
+    ctx.setTransform(mat.a, mat.b, mat.c, mat.d, mat.e, mat.f);
+  }
 };
 
 const FACTORIES = {
   Player: function() {
-    return new Entity("Player", PosRect.VAL, posDef);
+    return new Entity("Player", renderPlayer, PosRect.VAL, posDef);
   },
   Exit: function() {
-    return new Entity("Exit", PosRect.VAL, posDef);
+    return new Entity("Exit", renderExit, PosRect.VAL, posDef);
   },
   Platform: function() {
-    return new Entity("Platform", PosSizeRect.VAL, posSizeDef);
+    return new Entity("Platform", renderPlatform, PosSizeRect.VAL, posSizeDef);
   },
   Box: function() {
-    return new Entity("Box", PosSizeRect.VAL, posSizeDef);
+    return new Entity("Box", null, PosSizeRect.VAL, posSizeDef);
   },
   Key: function() {
-    return new Entity("Key", PosRect.VAL, posDef, indexDef);
+    return new Entity("Key", null, PosRect.VAL, posDef, indexDef);
   },
   Lock: function() {
-    return new Entity("Lock", PosRect.VAL, posDef, indexDef, idDef);
+    return new Entity("Lock", null, PosRect.VAL, posDef, indexDef, idDef);
   },
   Button: function() {
-    return new Entity("Button", PosRect.VAL, posDef, orientDef, idDef);
+    return new Entity("Button", null, PosRect.VAL, posDef, orientDef, idDef);
   },
   Switch: function() {
-    return new Entity("Switch", PosRect.VAL, posDef, orientDef, idDef);
+    return new Entity("Switch", null, PosRect.VAL, posDef, orientDef, idDef);
   },
   Door: function() {
-    return new Entity("Door", PosRect.VAL, doorDef, posDef, orientDef, inputDef);
+    return new Entity("Door", null, PosRect.VAL, doorDef, posDef, orientDef, inputDef);
   },
   MovingPlatform: function() {
-    return new Entity("MovingPlatform", MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
+    return new Entity("MovingPlatform", null, MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
   },
   LaserEmitter: function() {
-    return new Entity("LaserEmitter", PosRect.VAL, posDef, rangeDef, idDef, inputDef);
+    return new Entity("LaserEmitter", null, PosRect.VAL, posDef, rangeDef, idDef, inputDef);
   },
   LaserDetector: function() {
-    return new Entity("LaserDetector", PosRect.VAL, detectorDef, posDef, idDef);
+    return new Entity("LaserDetector", null, PosRect.VAL, detectorDef, posDef, idDef);
   },
   Text: function() {
-    return new Entity("Text", PosRect.VAL, textDef, posDef);
+    return new Entity("Text", null, PosRect.VAL, textDef, posDef);
   }
 };
 

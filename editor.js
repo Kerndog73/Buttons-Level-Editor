@@ -28,7 +28,7 @@ $(document).ready(function() {
     lastTime = time;
     ctx.clearRect(0, 0, PIXELS.x, PIXELS.y);
 
-    renderEntities();
+    entities.render(ctx);
     renderGrid();
     renderMouseHover();
   })();
@@ -115,10 +115,4 @@ function renderGrid() {
   ctx.stroke();
 
   ctx.setTransform(transform.a, transform.b, transform.c, transform.d, transform.e, transform.f);
-}
-
-function renderEntities() {
-  entities.foreach(e => {
-
-  });
 }
