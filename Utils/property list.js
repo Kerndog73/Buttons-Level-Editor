@@ -14,8 +14,16 @@ class PropertyList {
   update() {
     this.element.empty();
     for (const entity of this.list) {
+      let div = $(document.createElement("div"));
+      this.element.append(div);
+
+      let span = $(document.createElement("span"));
+      div.append(span);
+      span.addClass("entity_name");
+      span.html(entity.name);
+
       let table = $(document.createElement("table"));
-      this.element.append(table);
+      div.append(table);
       let tbody = $(document.createElement("tbody"));
       table.append(tbody);
 
