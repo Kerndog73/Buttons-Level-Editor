@@ -28,7 +28,6 @@ class PropertyList {
       table.append(tbody);
 
       for (const key in entity.props) {
-        const val = entity.props[key];
         let row = $(document.createElement("tr"));
         tbody.append(row);
 
@@ -40,91 +39,108 @@ class PropertyList {
         row.append(valCell);
         valCell.addClass("val_cell");
 
-        let keyInput = $(document.createElement("input"));
+        let keyInput = this.createKeyInput(key);
         keyCell.append(keyInput);
-        keyInput.addClass("key_input");
-        keyInput.attr("type", "text");
-        keyInput.val(key);
 
-        let valInput = this.createValueInput(val, entity.getPropType(key));
+        let valInput = this.createValueInput(entity.props, key, entity.getPropType(key));
         valCell.append(valInput);
       }
     }
   }
 
-  createValueInput(value, type) {
-    switch (type) {
-      case PropType.NONE:
-        console.assert(false);
-        return null;
-      case PropType.FLOAT:
-        return this.createFloat(value);
-      case PropType.UINT:
-        return this.createUint(value);
-      case PropType.VEC:
-        return this.createVec(value);
-      case PropType.ORIENT:
-        return this.createOrient(value);
-      case PropType.STRING:
-        return this.createString(value);
-      case PropType.ARRAY:
-        return this.createArray(value);
-      case PropType.BOOLEAN:
-        return this.createBoolean(value);
-    }
-    return e;
-  }
-
-  createFloat(value) {
+  createKeyInput(value) {
     let e = $(document.createElement("input"));
-    e.addClass("val_float");
-    e.attr("type", "number");
+    e.addClass("key_input");
+    e.attr("type", "text");
+    e.attr("readonly", "");
     e.val(value);
     return e;
   }
-  createUint(value) {
+
+  createValueInput(props, key, type) {
+    switch (type) {
+      case PropType.FLOAT:
+        return this.createFloat(props, key);
+      case PropType.UINT:
+        return this.createUint(props, key);
+      case PropType.VEC:
+        return this.createVec(props, key);
+      case PropType.ORIENT:
+        return this.createOrient(props, key);
+      case PropType.STRING:
+        return this.createString(props, key);
+      case PropType.ARRAY:
+        return this.createArray(props, key);
+      case PropType.BOOLEAN:
+        return this.createBoolean(props, key);
+      default:
+        console.error("Invalid property type passes to PropertyList::createValueInput", type);
+        return null;
+    }
+  }
+
+  createFloat(props, key) {
+    let e = $(document.createElement("input"));
+    e.addClass("val_float");
+    e.attr("type", "number");
+    e.val(props[key]);
+    e.change(function() {
+      props[key] = e.val() * 1.0;
+    });
+    return e;
+  }
+  createUint(props, key) {
     let e = $(document.createElement("input"));
     e.addClass("val_uint");
     e.attr("type", "number");
     e.attr("min", "0");
     e.attr("step", "1");
-    e.val(value);
+    e.val(props[key]);
+    e.change(function(event) {
+      props[key] = e.val() | 0;
+    });
     return e;
   }
-  createVec(value) {
+  createVec(props, key) {
     let e = $(document.createElement("div"));
     e.addClass("val_vec");
-    e.append(this.createUint(value.x));
-    e.append(this.createUint(value.y));
+    e.append(this.createUint(props[key], "x"));
+    e.append(this.createUint(props[key], "y"));
     return e;
   }
-  createOrient(value) {
-    let e = createEnum(Orient, value);
+  createOrient(props, key) {
+    let e = this.createEnum(Orient, props, key);
     e.addClass("val_orient");
     return e;
   }
-  createString(value) {
+  createString(props, key) {
     let e = $(document.createElement("input"));
     e.addClass("val_string");
     e.attr("type", "text");
-    e.val(value);
+    e.val(props[key]);
+    e.change(function() {
+      props[key] = e.val();
+    });
     return e;
   }
-  createArray(value) {
+  createArray(props, key) {
     let e = $(document.createElement("div"));
     e.addClass("val_array");
-    for (let val of value) {
-      e.append(createUint(val));
+    for (let i in props[key]) {
+      e.append(this.createUint(props[key], i));
     }
     return e;
   }
-  createBoolean(value) {
-    createEnum(Boolean, value);
+  createBoolean(props, key) {
+    let e = this.createEnum(Boolean, props, key);
+    e.addClass("val_boolean");
+    return e;
   }
 
-  createEnum(enumObject, value) {
+  createEnum(enumObject, props, key) {
     let e = $(document.createElement("select"));
-    if (enumObject.name == "Boolean") {
+    const value = props[key];
+    if (enumObject.name === "Boolean") {
       e.append(this.createOption("FALSE", !value));
       e.append(this.createOption("TRUE", value));
     } else {
@@ -132,6 +148,13 @@ class PropertyList {
         e.append(this.createOption(enumName, value === enumObject[enumName]));
       }
     }
+    e.change(function() {
+      if (enumObject.name === "Boolean") {
+        props[key] = (e.val() === "TRUE");
+      } else {
+        props[key] = enumObject[e.val()];
+      }
+    });
     return e;
   }
 
