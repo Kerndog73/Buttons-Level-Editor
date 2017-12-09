@@ -19,20 +19,31 @@
 
 }
 
-#properties input, #properties td {
+#properties td {
   padding: 0;
 }
 
-/* Key text boxes*/
-#properties table .key_input {
-  box-sizing: content-box;
-  display: block;
-  width: calc(100% - 4px);
-  height: 100%;
+#properties .key_cell {
+  border-right: 2px solid black;
 }
 
-/*String text boxes*/
-#properties table .val_string {
+#properties input {
+  border: none;
+  padding: 3px;
+}
+
+#properties input:focus {
+  border: 2px solid rgb(255, 0, 0);
+  padding: 1px;
+  outline: none;
+}
+
+#properties .key_input {
   box-sizing: content-box;
-  width: calc(100% - 4px);
+  width: calc(100% - 6px);
+}
+
+#properties .val_string, #properties .val_number {
+  box-sizing: content-box;
+  width: calc(100% - 6px);
 }
