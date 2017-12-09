@@ -20,6 +20,10 @@ class Vec {
     this.y = other.y;
   }
 
+  toString() {
+    return `Vec {${this.x}, ${this.y}}`;
+  }
+
   eq(other) {
     return this.x === other.x && this.y === other.y;
   }

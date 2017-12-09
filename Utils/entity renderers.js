@@ -35,14 +35,14 @@ function getOr(props, name, alternative) {
   }
 }
 
-function renderPlayer(ctx, props) {
+function renderPlayer(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(255, 255, 255)";
   renderCircle(ctx, 0.5, 0.5, 0.5);
   ctx.fill();
 }
 
-function renderExit(ctx, props) {
+function renderExit(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(0, 0, 255)";
   ctx.fillRect(0, 0, 1, 1);
@@ -52,13 +52,13 @@ function renderExit(ctx, props) {
   ctx.fillRect(0.25, 0.25, 0.5, 0.5);
 }
 
-function renderPlatform(ctx, props) {
+function renderPlatform(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(63, 63, 63)";
   ctx.fillRect(0, 0, 1, 1);
 }
 
-function renderBox(ctx, props) {
+function renderBox(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(193, 154, 107)";
   ctx.fillRect(0, 0, 1, 1);
@@ -127,7 +127,7 @@ function renderDoor(ctx, props) {
   ctx.fillRect(0.25, 0.0, 0.5, getOr(props, "height", 1));
 }
 
-function renderMovingPlatform(ctx, props) {
+function renderMovingPlatform(ctx) {
   ctx.beginPath();
   ctx.fillStyle = "rgb(127, 127, 127)";
   ctx.fillRect(0, 0, 1, 1);
