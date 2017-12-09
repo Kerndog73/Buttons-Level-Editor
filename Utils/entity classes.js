@@ -88,7 +88,7 @@ const FACTORIES = {
     return new Entity("MovingPlatform", renderMovingPlatform, MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
   },
   LaserEmitter: function() {
-    return new Entity("LaserEmitter", renderLaserEmitter, MovingPlatformRect.VAL, posDef, rangeDef, idDef, inputDef);
+    return new Entity("LaserEmitter", renderLaserEmitter, LaserEmitterRect.VAL, posDef, rangeDef, idDef, inputDef);
   },
   LaserDetector: function() {
     return new Entity("LaserDetector", renderLaserDetector, PosRect.VAL, detectorDef, posDef, idDef);

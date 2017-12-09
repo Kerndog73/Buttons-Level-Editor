@@ -24,7 +24,14 @@ function renderPolygon(ctx, sides, radius, rotation) {
 }
 
 function orientTransform(ctx, orient) {
-  ctx.rotate(Math.PI / 2.0 * orient);
+  const table = {
+    [Orient.UP]: new Vec(0, 0),
+    [Orient.RIGHT]: new Vec(0, 1),
+    [Orient.DOWN]: new Vec(1, 1),
+    [Orient.LEFT]: new Vec(1, 0)
+  };
+  ctx.translate(table[orient].x, table[orient].y);
+  ctx.rotate(-Math.PI / 2.0 * orient);
 }
 
 function getOr(props, name, alternative) {
@@ -134,18 +141,42 @@ function renderMovingPlatform(ctx) {
 }
 
 function renderLaserEmitter(ctx, props) {
-  const scale = new Vec(32, 32);
-  const start = Vec.mul(scale, getOr(props, "start", Vec.ZERO));
-  const end = Vec.mul(scale, getOr(props, "end", Vec.ZERO));
+  const orient = getOr(props, "orient", Orient.UP);
 
-  ctx.scale(1.0 / scale.x, 1.0 / scale.y);
-  orientTransform(ctx, getOr(props, "orient", Orient.UP));
-  ctx.beginPath();
-  ctx.moveTo(start.x, start.y);
-  ctx.lineTo(end.x, end.y);
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "rgb(255, 0, 0)";
-  ctx.stroke();
+  if (props.hasOwnProperty("end")) {
+    const startTable = {
+      [Orient.UP]: new Vec(0.5, 0.0),
+      [Orient.RIGHT]: new Vec(0.0, 0.5),
+      [Orient.DOWN]: new Vec(0.5, 1.0),
+      [Orient.LEFT]: new Vec(1.0, 0.5)
+    };
+
+    const endTable = {
+      [Orient.UP]: new Vec(0.5, 1.0),
+      [Orient.RIGHT]: new Vec(1.0, 0.5),
+      [Orient.DOWN]: new Vec(0.5, 0.0),
+      [Orient.LEFT]: new Vec(0.0, 0.5)
+    };
+
+    const scale = new Vec(32, 32);
+    let start = getOr(props, "start", Vec.ZERO);
+    start.add(startTable[orient]);
+    start.mul(scale);
+    let end = props.end;
+    end.add(endTable[orient]);
+    end.mul(scale);
+    
+    ctx.scale(1.0 / scale.x, 1.0 / scale.y);
+    ctx.beginPath();
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(end.x, end.y);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgb(255, 0, 0)";
+    ctx.stroke();
+    ctx.scale(scale.x, scale.y);
+  }
+
+  orientTransform(ctx, orient);
 
   ctx.beginPath();
   ctx.moveTo(0, 0);

@@ -9,24 +9,27 @@ class EntityRect {
   }
 };
 
-class PosRect {
-  getRect(props) {
-    if (props.hasOwnProperty("pos")) {
-      return new Rect(props.pos, props.pos);
-    } else {
-      return new Rect(Vec.ZERO, Vec.ZERO);
+function makePosRect(name, posName) {
+  window[name] = class extends EntityRect {
+    getRect(props) {
+      if (props.hasOwnProperty(posName)) {
+        return new Rect(props[posName], props[posName]);
+      } else {
+        return new Rect(Vec.ZERO, Vec.ZERO);
+      }
     }
-  }
-  setRect(props, newRect) {
-    // Rect constructor ensures that min <= max
-    const rect = newRect.clone();
-    props.pos = rect.min;
-  }
-};
-makeConstProp(PosRect, "VAL", new PosRect());
+
+    setRect(props, newRect) {
+      // Rect constructor ensures that min <= max
+      const rect = newRect.clone();
+      props[posName] = rect.min;
+    }
+  };
+  makeConstProp(window[name], "VAL", new window[name]());
+}
 
 function makePosSizeRect(name, posName) {
-  window[name] = class {
+  window[name] = class extends EntityRect {
     getRect(props) {
       let pos = new Vec(0, 0);
       if (props.hasOwnProperty(posName)) {
@@ -40,6 +43,7 @@ function makePosSizeRect(name, posName) {
     }
 
     setRect(props, newRect) {
+      // Rect constructor ensures that min <= max
       const rect = newRect.clone();
       props[posName] = rect.min;
       props.size = rect.size();
@@ -47,6 +51,9 @@ function makePosSizeRect(name, posName) {
   };
   makeConstProp(window[name], "VAL", new window[name]());
 }
+
+makePosRect("PosRect", "pos");
+makePosRect("LaserEmitterRect", "start");
 
 makePosSizeRect("PosSizeRect", "pos");
 makePosSizeRect("MovingPlatformRect", "start");
