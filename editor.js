@@ -1,6 +1,6 @@
 const MOUSE_OUT = new Vec(-1, -1);
 const LEVEL = new Vec(32, 18);
-const TILE = new Vec(32, 32);
+const TILE = new Vec(64, 64);
 const PIXELS = Vec.mul(LEVEL, TILE);
 
 let canvasContainer, canvas, ctx;
