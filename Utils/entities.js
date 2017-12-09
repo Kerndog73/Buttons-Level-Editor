@@ -22,4 +22,10 @@ class Entities {
     }
     return list;
   }
+
+  create(type, rect) {
+    let entity = makeEntity(type);
+    entity.setRect(rect);
+    this._entities.push(entity);
+  }
 };

@@ -1,6 +1,6 @@
 class Tool {};
 
-window.SelectTool = class SelectTool extends Tool {
+window.SelectTool = class extends Tool {
   constructor() {
     super();
     this.startTile = new Vec(0, 0);
@@ -11,7 +11,28 @@ window.SelectTool = class SelectTool extends Tool {
   }
 
   onMouseUp(tile) {
-    let rect = new Rect(this.startTile, tile);
+    const rect = new Rect(this.startTile, tile);
     entities.findInRect(rect);
   }
 };
+
+function makeFactoryTool(type) {
+  window[type + "Tool"] = class extends Tool {
+    constructor() {
+      super();
+      this.startTile = new Vec(0, 0);
+    }
+
+    onMouseDown(tile) {
+      this.startTile = tile;
+    }
+
+    onMouseUp(tile) {
+      entities.create(type, new Rect(this.startTile, tile));
+    }
+  }
+}
+
+for (let type of ENTITIES) {
+  makeFactoryTool(type);
+}

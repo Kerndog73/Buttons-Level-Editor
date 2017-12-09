@@ -182,10 +182,10 @@ class Entity {
     return this.name;
   }
   getRect() {
-    return rect.getRect(this.props);
+    return this.rect.getRect(this.props);
   }
   setRect(newRect) {
-    rect.setRect(this.props, newRect);
+    this.rect.setRect(this.props, newRect);
   }
   getPropType(name) {
     const type = this.defs.get(name);
@@ -206,50 +206,53 @@ class Entity {
   }
 };
 
+const FACTORIES = {
+  Player: function() {
+    return new Entity("Player", PosRect.VAL, posDef);
+  },
+  Exit: function() {
+    return new Entity("Exit", PosRect.VAL, posDef);
+  },
+  Platform: function() {
+    return new Entity("Platform", PosSizeRect.VAL, posSizeDef);
+  },
+  Box: function() {
+    return new Entity("Box", PosSizeRect.VAL, posSizeDef);
+  },
+  Key: function() {
+    return new Entity("Key", PosRect.VAL, posDef, indexDef);
+  },
+  Lock: function() {
+    return new Entity("Lock", PosRect.VAL, posDef, indexDef, idDef);
+  },
+  Button: function() {
+    return new Entity("Button", PosRect.VAL, posDef, orientDef, idDef);
+  },
+  Switch: function() {
+    return new Entity("Switch", PosRect.VAL, posDef, orientDef, idDef);
+  },
+  Door: function() {
+    return new Entity("Door", PosRect.VAL, doorDef, posDef, orientDef, inputDef);
+  },
+  MovingPlatform: function() {
+    return new Entity("MovingPlatform", MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
+  },
+  LaserEmitter: function() {
+    return new Entity("LaserEmitter", PosRect.VAL, posDef, rangeDef, idDef, inputDef);
+  },
+  LaserDetector: function() {
+    return new Entity("LaserDetector", PosRect.VAL, detectorDef, posDef, idDef);
+  },
+  Text: function() {
+    return new Entity("Text", PosRect.VAL, textDef, posDef);
+  }
+};
+
+const ENTITIES = Object.getOwnPropertyNames(FACTORIES);
+
 function makeEntity(type) {
-  const factories = {
-    Player: function() {
-      return new Entity("Player", PosRect.VAL, posDef);
-    },
-    Exit: function() {
-      return new Entity("Exit", PosRect.VAL, posDef);
-    },
-    Platform: function() {
-      return new Entity("Platform", PosSizeRect.VAL, posSizeDef);
-    },
-    Box: function() {
-      return new Entity("Box", PosSizeRect.VAL, posSizeDef);
-    },
-    Key: function() {
-      return new Entity("Key", PosRect.VAL, posDef, indexDef);
-    },
-    Lock: function() {
-      return new Entity("Lock", PosRect.VAL, posDef, indexDef, idDef);
-    },
-    Button: function() {
-      return new Entity("Button", PosRect.VAL, posDef, orientDef, idDef);
-    },
-    Switch: function() {
-      return new Entity("Switch", PosRect.VAL, posDef, orientDef, idDef);
-    },
-    Door: function() {
-      return new Entity("Door", PosRect.VAL, doorDef, posDef, orientDef, inputDef);
-    },
-    MovingPlatform: function() {
-      return new Entity("MovingPlatform", MovingPlatformRect.VAL, movingPlatformDef, rangeDef, inputDef);
-    },
-    LaserEmitter: function() {
-      return new Entity("LaserEmitter", PosRect.VAL, posDef, rangeDef, idDef, inputDef);
-    },
-    LaserDetector: function() {
-      return new Entity("LaserDetector", PosRect.VAL, detectorDef, posDef, idDef);
-    },
-    Text: function() {
-      return new Enttiy("Text", PosRect.VAL, textDef, posDef);
-    }
-  };
-  if (factories.hasOwnProperty(type)) {
-    return factories[type]();
+  if (FACTORIES.hasOwnProperty(type)) {
+    return FACTORIES[type]();
   } else {
     console.error("Invalid entity type:", type);
     return null;

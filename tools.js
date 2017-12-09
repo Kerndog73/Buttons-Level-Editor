@@ -1,4 +1,4 @@
-let enabledTool;
+let enabledTool = new SelectTool();
 
 $(document).ready(function() {
   $(".tool").click(function(e) {
@@ -14,6 +14,3 @@ $(document).ready(function() {
     enabledTool = new window[toolName];
   });
 });
-
-enabledTool = new SelectTool();
-window.SelectTool = SelectTool;
