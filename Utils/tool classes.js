@@ -1,3 +1,5 @@
+"use strict";
+
 class Tool {};
 
 window.SelectTool = class extends Tool {

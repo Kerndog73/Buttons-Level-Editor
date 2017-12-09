@@ -1,3 +1,5 @@
+"use strict";
+
 function mergeMaps(maps) {
   let result = new Map();
   for (let map of maps) {

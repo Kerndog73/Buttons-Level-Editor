@@ -1,3 +1,5 @@
+"use strict";
+
 class Rect {
   constructor(min, max) {
     this.min = new Vec(Math.min(min.x, max.x), Math.min(min.y, max.y));
@@ -18,10 +20,6 @@ class Rect {
       this.max.x - this.min.x + 1,
       this.max.y - this.min.y + 1
     );
-  }
-
-  validate() {
-    this.copy(this.clone());
   }
 
   interceptsWith(other) {

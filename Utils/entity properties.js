@@ -1,3 +1,5 @@
+"use strict";
+
 let Orient = {};
 makeConstProp(Orient, "UP", 0);
 makeConstProp(Orient, "RIGHT", 1);

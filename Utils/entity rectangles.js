@@ -1,3 +1,5 @@
+"use strict";
+
 class EntityRect {
   getRect(props) {
     console.error("EntityRect::getRect not implemented for ", this);

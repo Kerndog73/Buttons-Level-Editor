@@ -1,3 +1,5 @@
+"use strict";
+
 let fileOpener, fileSaver;
 
 $(document).ready(function() {

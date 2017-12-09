@@ -1,3 +1,5 @@
+"use strict";
+
 function colorF(r, g, b, a = 1.0) {
   let mul = x => Math.round(x * 255);
   return `rgba(${mul(r)}, ${mul(g)}, ${mul(b)}, ${a})`;

@@ -1,3 +1,5 @@
+"use strict";
+
 class Entities {
   constructor() {
     this._entities = [];

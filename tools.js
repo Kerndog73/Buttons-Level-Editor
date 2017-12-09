@@ -1,3 +1,5 @@
+"use strict";
+
 let enabledTool = new SelectTool();
 
 $(document).ready(function() {
