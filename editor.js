@@ -8,6 +8,7 @@ const PIXELS = Vec.mul(LEVEL, TILE);
 let canvasContainer, canvas, ctx;
 let entities = new Entities();
 let mouseTile = MOUSE_OUT.clone();
+let mouseDown = false;
 let canvasElementSize = new Vec(1, 1);
 
 $(document).ready(function() {
@@ -32,7 +33,13 @@ $(document).ready(function() {
 
     entities.render(ctx);
     renderGrid();
-    renderMouseHover();
+    if (!mouseTile.eq(MOUSE_OUT)) {
+      if (mouseDown) {
+        enabledTool.dragRender(ctx);
+      } else {
+        enabledTool.hoverRender(ctx, mouseTile);
+      }
+    }
   })();
 });
 
@@ -72,10 +79,12 @@ function onMouseMove(e) {
 }
 
 function onMouseDown() {
+  mouseDown = true;
   enabledTool.onMouseDown(mouseTile.clone());
 }
 
 function onMouseUp() {
+  mouseDown = false;
   enabledTool.onMouseUp(mouseTile.clone());
 }
 
@@ -87,13 +96,6 @@ function setupCanvas() {
   ctx = canvas[0].getContext("2d");
   ctx.translate(0, PIXELS.y);
   ctx.scale(TILE.x, -TILE.y);
-}
-
-function renderMouseHover() {
-  if (!mouseTile.eq(MOUSE_OUT)) {
-    ctx.fillStyle = "rgba(127, 127, 127, 0.4)";
-    ctx.fillRect(mouseTile.x, mouseTile.y, 1, 1);
-  }
 }
 
 function renderGrid() {

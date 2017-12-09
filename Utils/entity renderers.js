@@ -165,7 +165,7 @@ function renderLaserEmitter(ctx, props) {
     let end = props.end;
     end.add(endTable[orient]);
     end.mul(scale);
-    
+
     ctx.scale(1.0 / scale.x, 1.0 / scale.y);
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
