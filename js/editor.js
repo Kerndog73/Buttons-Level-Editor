@@ -48,10 +48,10 @@ function onWindowResize() {
   canvasElementSize.y = canvas.height();
 
   if (canvasRatio > canvasContainerRatio) {
-    canvas.css("left", "0");
-    canvas.css("top", (canvasContainer.height() - canvasElementSize.y) / 2 + "px");
+    canvas.css("left", "0");//      accounting for the border of 4px     v
+    canvas.css("top", (canvasContainer.height() - (canvasElementSize.y + 8)) / 2 + "px");
   } else {
-    canvas.css("left", (canvasContainer.width() - canvasElementSize.x) / 2 + "px");
+    canvas.css("left", (canvasContainer.width() - (canvasElementSize.x + 8)) / 2 + "px");
     canvas.css("top", "0");
   }
 }
