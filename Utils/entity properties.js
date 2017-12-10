@@ -23,7 +23,7 @@ function isUint(value) {
 function isType(propType, prop) {
   switch (propType) {
     case PropType.NONE:
-      return prop === undefined;
+      return prop === null;
     case PropType.FLOAT:
       return typeof(prop) === "number";
     case PropType.UINT:
@@ -43,6 +43,30 @@ function isType(propType, prop) {
       return false;
   }
 };
+
+function defaultInitType(propType) {
+  switch (propType) {
+    case PropType.NONE:
+      return null;
+    case PropType.FLOAT:
+      return 0.0;
+    case PropType.UINT:
+      return 0;
+    case PropType.VEC:
+      return new Vec(0, 0);
+    case PropType.ORIENT:
+      return Orient.UP;
+    case PropType.STRING:
+      return "";
+    case PropType.ARRAY:
+      return [];
+    case PropType.BOOLEAN:
+      return false;
+    default:
+      console.error("Invalid property type", propType);
+      return undefined;
+  }
+}
 
 const posDef = new Map([
   ["pos", PropType.VEC]

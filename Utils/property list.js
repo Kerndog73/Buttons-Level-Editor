@@ -14,47 +14,82 @@ class PropertyList {
   update() {
     this.element.empty();
     for (const entity of this.list) {
-      let div = $(document.createElement("div"));
+      let div = $(String.raw`<div>
+        <span class="entity_name">${entity.name}</span>
+        <table>
+          <tbody></tbody>
+        </table>
+      </div>`);
       this.element.append(div);
-
-      let span = $(document.createElement("span"));
-      div.append(span);
-      span.addClass("entity_name");
-      span.html(entity.name);
-
-      let table = $(document.createElement("table"));
-      div.append(table);
-      let tbody = $(document.createElement("tbody"));
-      table.append(tbody);
+      let tbody = div.find("tbody");
 
       for (const key in entity.props) {
-        let row = $(document.createElement("tr"));
-        tbody.append(row);
-
-        let keyCell = $(document.createElement("td"));
-        row.append(keyCell);
-        keyCell.addClass("key_cell");
-
-        let valCell = $(document.createElement("td"));
-        row.append(valCell);
-        valCell.addClass("val_cell");
-
-        let keyInput = this.createKeyInput(key);
-        keyCell.append(keyInput);
-
-        let valInput = this.createValueInput(entity.props, key, entity.getPropType(key));
-        valCell.append(valInput);
+        tbody.append(this.createKeyValPair(entity.props, key, entity.getPropType(key)));
       }
+
+      tbody.append(this.createInsertButton(entity));
     }
   }
 
-  createKeyInput(value) {
-    let e = $(document.createElement("input"));
-    e.addClass("key_input");
-    e.attr("type", "text");
-    e.attr("readonly", "");
+  createInsertButton(entity) {
+    if (Object.keys(entity.props).length === entity.defs.size) {
+      return;
+    }
+
+    let row = $(String.raw`<tr>
+      <td>
+        <button class="insert_prop">Insert Property</button>
+      </td>
+      <td>
+        <select class="select_prop_type"></select>
+      </td>
+    </tr>`);
+
+    let button = row.find("button");
+    let select = row.find("select");
+
+    for (let [propName] of entity.defs) {
+      if (!entity.props.hasOwnProperty(propName)) {
+        select.append(this.createSimpleOption(propName));
+      }
+    }
+    select.children(":first-child").attr("selected", "");
+
+    let that = this;
+    button.click(function() {
+      const propName = select.val();
+      select.children(`option[value="${propName}"]`).remove();
+      const type = entity.defs.get(propName);
+      entity.props[propName] = defaultInitType(type);
+      row.before(that.createKeyValPair(entity.props, propName, type));
+
+      if (select.children().length === 0) {
+        row.remove();
+      }
+    });
+
+    return row;
+  }
+
+  createSimpleOption(value) {
+    let e = $(document.createElement("option"));
     e.val(value);
+    e.html(value);
     return e;
+  }
+
+  createKeyValPair(props, key, type) {
+    let row = $(String.raw`<tr>
+      <td class="key_cell"></td>
+      <td class="val_cell"></td>
+    </tr>`);
+    row.children(".key_cell").append(this.createKeyInput(key));
+    row.children(".val_cell").append(this.createValueInput(props, key, type));
+    return row;
+  }
+
+  createKeyInput(value) {
+    return $(String.raw`<input type="text" readonly value="${value}" />`);
   }
 
   createValueInput(props, key, type) {
@@ -80,30 +115,21 @@ class PropertyList {
   }
 
   createFloat(props, key) {
-    let e = $(document.createElement("input"));
-    e.addClass("val_float");
-    e.attr("type", "number");
-    e.val(props[key]);
+    let e = $(String.raw`<input class="val_float" type="number" value="${props[key]}"/>`);
     e.change(function() {
       props[key] = e.val() * 1.0;
     });
     return e;
   }
   createUint(props, key) {
-    let e = $(document.createElement("input"));
-    e.addClass("val_uint");
-    e.attr("type", "number");
-    e.attr("min", "0");
-    e.attr("step", "1");
-    e.val(props[key]);
-    e.change(function(event) {
+    let e = $(String.raw`<input class="val_uint" type="number" min="0" step="1" value="${props[key]}" />`);
+    e.change(function() {
       props[key] = e.val() | 0;
     });
     return e;
   }
   createVec(props, key) {
-    let e = $(document.createElement("div"));
-    e.addClass("val_vec");
+    let e = $(String.raw`<div class="val_vec"></div>`);
     e.append(this.createUint(props[key], "x"));
     e.append(this.createUint(props[key], "y"));
     return e;
@@ -114,21 +140,24 @@ class PropertyList {
     return e;
   }
   createString(props, key) {
-    let e = $(document.createElement("input"));
-    e.addClass("val_string");
-    e.attr("type", "text");
-    e.val(props[key]);
+    let e = $(String.raw`<input class="val_string" type="text" value="${props[key]}" />`);
     e.change(function() {
       props[key] = e.val();
     });
     return e;
   }
   createArray(props, key) {
-    let e = $(document.createElement("div"));
-    e.addClass("val_array");
+    let e = $(String.raw`<div class="val_array"></div>`);
     for (let i in props[key]) {
       e.append(this.createUint(props[key], i));
     }
+    let button = $(String.raw`<button class="array_insert_button">Insert</button>`);
+    e.append(button);
+    let that = this;
+    button.click(function() {
+      props[key].push(0);
+      button.before(that.createUint(props[key], props[key].length - 1));
+    });
     return e;
   }
   createBoolean(props, key) {
