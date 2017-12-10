@@ -1,0 +1,23 @@
+.border_color {
+  background-color: #000;
+}
+
+.back {
+  background-color: #555;
+}
+
+.button, .radio {
+  background-color: #888;
+}
+
+.button:hover, .radio:hover {
+  background-color: #AAA;
+}
+
+.enabled {
+  background-color: #CCC !important;
+}
+
+.button span, .radio span {
+  color: #FFF;
+}

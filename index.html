@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Level Editor</title>
+    <link rel="stylesheet" href="css/color%20scheme.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/grid.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/editor.css" />
     <link rel="stylesheet" href="css/tools.css" />
@@ -16,57 +19,57 @@
       </div>
 
       <div id="tools" class="panel">
-        <div id="select_tool" style="grid-column: 1" class="row1 tool enabled">
+        <div class="row1 col1 radio enabled" id="select_tool">
           <span>Select</span>
         </div>
-        <div id="player_tool" style="grid-column: 2"  class="row1 tool">
+        <div class="row1 col2 radio" id="player_tool">
           <span>Player</span>
         </div>
-        <div id="exit_tool" style="grid-column: 3"  class="row1 tool">
+        <div class="row1 col3 radio" id="exit_tool">
           <span>Exit</span>
         </div>
-        <div id="platform_tool" style="grid-column: 4"  class="row1 tool">
+        <div class="row1 col4 radio" id="platform_tool">
           <span>Platform</span>
         </div>
-        <div id="box_tool" style="grid-column: 5"  class="row1 tool">
+        <div class="row1 col5 radio" id="box_tool">
           <span>Box</span>
         </div>
-        <div id="key_tool" style="grid-column: 6"  class="row1 tool">
+        <div class="row1 col6 radio" id="key_tool">
           <span>Key</span>
         </div>
-        <div id="lock_tool" style="grid-column: 7"  class="row1 tool">
+        <div class="row1 col7 radio" id="lock_tool">
           <span>Lock</span>
         </div>
 
-        <div id="button_tool" style="grid-column: 1"  class="row2 tool">
+        <div class="row2 col1 radio" id="button_tool">
           <span>Button</span>
         </div>
-        <div id="switch_tool" style="grid-column: 2"  class="row2 tool">
+        <div class="row2 col2 radio" id="switch_tool">
           <span>Switch</span>
         </div>
-        <div id="door_tool" style="grid-column: 3"  class="row2 tool">
+        <div class="row2 col3 radio" id="door_tool">
           <span>Door</span>
         </div>
-        <div id="moving_platform_tool" style="grid-column: 4"  class="row2 tool">
+        <div class="row2 col4 radio" id="moving_platform_tool">
           <span>Moving Platform</span>
         </div>
-        <div id="laser_emitter_tool" style="grid-column: 5"  class="row2 tool">
+        <div class="row2 col5 radio" id="laser_emitter_tool">
           <span>Laser Emitter</span>
         </div>
-        <div id="laser_detector_tool" style="grid-column: 6"  class="row2 tool">
+        <div class="row2 col6 radio" id="laser_detector_tool">
           <span>Laser Detector</span>
         </div>
-        <div id="text_tool" style="grid-column: 7"  class="row2 tool">
+        <div class="row2 col7 radio" id="text_tool">
           <span>Text</span>
         </div>
       </div>
 
       <div id="properties" class="panel"></div>
       <div id="operations" class="panel">
-        <div id="open_op" class="operation">
+        <div class="row1 col1 button" id="open_op">
           <span>Open</span>
         </div>
-        <div id="save_op" class="operation">
+        <div class="row1 col2 button" id="save_op">
           <span>Save</span>
         </div>
         <input id="file_opener" class="hidden" type="file" accept=".jsonnet" />

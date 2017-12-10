@@ -7,30 +7,6 @@
   grid-gap: 4px;
 }
 
-#operations #open_op {
-  grid-row: 1;
-  grid-column: 1;
-}
-
-#operations #save_op {
-  grid-row: 1;
-  grid-column: 2;
-}
-
-.operation {
-  background-color: #888;
-  display: flex;
-  align-items: center;
-}
-
-.operation:hover {
-  cursor: pointer;
-  background-color: #AAA;
-}
-
-.operation span {
-  color: white;
-  width: 100%;
-  text-align: center;
+#operations .button span {
   font-size: 1.5vw;
 }

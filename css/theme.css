@@ -1,0 +1,13 @@
+.button, .radio {
+  display: flex;
+  align-items: center;
+}
+
+.button span, .radio span {
+  text-align: center;
+  width: 100%;
+}
+
+.button:hover, .radio:hover {
+  cursor: pointer;
+}

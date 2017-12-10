@@ -3,8 +3,9 @@
 let enabledTool = new SelectTool();
 
 $(document).ready(function() {
-  $(".tool").click(function(e) {
-    $(".tool").removeClass("enabled");
+  let tools = $("#tools .radio");
+  tools.click(function(e) {
+    tools.removeClass("enabled");
     let tool = $(e.currentTarget);
     tool.addClass("enabled");
 
