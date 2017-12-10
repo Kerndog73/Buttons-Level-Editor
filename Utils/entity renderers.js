@@ -198,7 +198,7 @@ function renderText(ctx, props) {
   ctx.beginPath();
   ctx.font = getOr(props, "font size", 32) + "px Arial";
   ctx.textAlign = "center";
-  ctx.textBaseLine = "middle";
+  ctx.textBaseline = "middle";
   ctx.direction = "ltr";
   ctx.fillStyle = "rgb(255, 255, 255)";
   ctx.scale(0.03, -0.03);
