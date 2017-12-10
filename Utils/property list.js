@@ -59,9 +59,8 @@ class PropertyList {
     button.click(function() {
       const propName = select.val();
       select.children(`option[value="${propName}"]`).remove();
-      const type = entity.defs.get(propName);
-      entity.props[propName] = defaultInitType(type);
-      row.before(that.createKeyValPair(entity.props, propName, type));
+      entity.createProp(propName);
+      row.before(that.createKeyValPair(entity.props, propName, entity.getPropType(propName)));
 
       if (select.children().length === 0) {
         row.remove();

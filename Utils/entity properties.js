@@ -44,78 +44,54 @@ function isType(propType, prop) {
   }
 };
 
-function defaultInitType(propType) {
-  switch (propType) {
-    case PropType.NONE:
-      return null;
-    case PropType.FLOAT:
-      return 0.0;
-    case PropType.UINT:
-      return 0;
-    case PropType.VEC:
-      return new Vec(0, 0);
-    case PropType.ORIENT:
-      return Orient.UP;
-    case PropType.STRING:
-      return "";
-    case PropType.ARRAY:
-      return [];
-    case PropType.BOOLEAN:
-      return false;
-    default:
-      console.error("Invalid property type", propType);
-      return undefined;
-  }
-}
-
 const posDef = new Map([
-  ["pos", PropType.VEC]
+  ["pos", [PropType.VEC, new Vec(0, 0)]]
 ]);
 
 const posSizeDef = new Map([
-  ["pos", PropType.VEC],
-  ["size", PropType.VEC]
+  ["pos", [PropType.VEC, new Vec(0, 0)]],
+  ["size", [PropType.VEC, new Vec(1, 1)]]
 ]);
 
 const indexDef = new Map([
-  ["index", PropType.UINT]
+  ["index", [PropType.UINT, 0]]
 ]);
 
 const idDef = new Map([
-  ["id", PropType.UINT]
+  ["id", [PropType.UINT, 0]]
 ]);
 
 const orientDef = new Map([
-  ["orient", PropType.ORIENT]
+  ["orient", [PropType.ORIENT, Orient.UP]]
 ]);
 
 const inputDef = new Map([
-  ["active", PropType.BOOL],
-  ["in", PropType.ARRAY],
-  ["on", PropType.BOOL],
-  ["operator", PropType.STRING]
+  ["active", [PropType.BOOL, false]],
+  ["in", [PropType.ARRAY, []]],
+  ["on", [PropType.BOOL, false]],
+  ["operator", [PropType.STRING, "and"]]
 ]);
 
 const doorDef = new Map([
-  ["height", PropType.UINT]
+  ["height", [PropType.UINT, 1]]
 ]);
 
 const rangeDef = new Map([
-  ["start", PropType.VEC],
-  ["end", PropType.VEC]
+  ["start", [PropType.VEC, new Vec(0, 0)]],
+  ["end", [PropType.VEC, new Vec(0, 0)]]
 ]);
 
 const movingPlatformDef = new Map([
-  ["size", PropType.VEC],
-  ["speed", PropType.FLOAT],
-  ["waiting time", PropType.FLOAT]
+  ["size", [PropType.VEC, new Vec(1, 1)]],
+  ["speed", [PropType.FLOAT, 1.0]],
+  ["waiting time", [PropType.FLOAT, 0.0]]
 ]);
 
 const detectorDef = new Map([
-  ["emitter", PropType.UINT]
+  ["emitter", [PropType.UINT, 0]]
 ]);
 
 const textDef = new Map([
-  ["font size", PropType.UINT],
-  ["text", PropType.STRING]
+  ["font size", [PropType.UINT, 32]],
+  ["text", [PropType.STRING, ""]]
 ]);

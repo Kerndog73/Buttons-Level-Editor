@@ -29,20 +29,28 @@ class Entity {
     this.rect.setRect(this.props, newRect);
   }
   getPropType(name) {
-    const type = this.defs.get(name);
-    if (type === undefined) {
-      return PropType.NONE;
+    const def = this.defs.get(name);
+    if (def !== undefined) {
+      return def[0];
     } else {
-      return type;
+      console.error("Tried to get invalid property type", this);
+      return PropType.NONE;
     }
   }
   setProp(name, value) {
-    const type = this.defs.get(name);
-    if (type !== undefined && isType(value)) {
+    const def = this.defs.get(name);
+    if (def !== undefined && isType(def[0], value)) {
       this.props[name] = value;
-      return true;
     } else {
-      return false;
+      console.error("Tried to invalid entity property", this);
+    }
+  }
+  createProp(name) {
+    const def = this.defs.get(name);
+    if (def !== undefined && !this.props.hasOwnProperty(name)) {
+      this.props[name] = def[1];
+    } else {
+      console.error("Tried to create invalid entity property", this);
     }
   }
   render(ctx) {
