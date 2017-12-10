@@ -32,10 +32,6 @@ class PropertyList {
   }
 
   createInsertButton(entity) {
-    if (Object.keys(entity.props).length === entity.defs.size) {
-      return;
-    }
-
     let row = $(String.raw`<tr>
       <td>
         <button class="insert_prop">Insert Property</button>
@@ -44,6 +40,10 @@ class PropertyList {
         <select class="select_prop_type"></select>
       </td>
     </tr>`);
+
+    if (Object.keys(entity.props).length === entity.defs.size) {
+      row.css("display", "none");
+    }
 
     let button = row.find("button");
     let select = row.find("select");
@@ -63,7 +63,7 @@ class PropertyList {
       row.before(that.createKeyValPair(entity.props, propName, entity.getPropType(propName)));
 
       if (select.children().length === 0) {
-        row.remove();
+        row.css("display", "none");
       }
     });
 
@@ -81,10 +81,24 @@ class PropertyList {
     let row = $(String.raw`<tr>
       <td class="key_cell"></td>
       <td class="val_cell"></td>
+      <td class="rem_cell"></td>
     </tr>`);
     row.children(".key_cell").append(this.createKeyInput(key));
     row.children(".val_cell").append(this.createValueInput(props, key, type));
+    row.children(".rem_cell").append(this.createRemButton(row, props, key));
     return row;
+  }
+
+  createRemButton(row, props, key) {
+    let e = $(String.raw`<button class="rem_button">X</button>`);
+    e.click(function() {
+      row.remove();
+      //JavaScript is so weird
+      delete props[key];
+      //   tbody    Add Property button
+      row.parent().children(":last-child").css("display", "initial");
+    });
+    return e;
   }
 
   createKeyInput(value) {
