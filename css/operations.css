@@ -23,8 +23,14 @@
   align-items: center;
 }
 
+.operation:hover {
+  cursor: pointer;
+  background-color: #AAA;
+}
+
 .operation span {
   color: white;
   width: 100%;
   text-align: center;
+  font-size: 1.5vw;
 }

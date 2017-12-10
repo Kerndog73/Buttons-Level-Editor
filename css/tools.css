@@ -8,7 +8,7 @@
 }
 
 .tool.enabled {
-  background-color: #AAA !important;
+  background-color: #CCC !important;
 }
 
 .tool {
@@ -21,10 +21,12 @@
   color: #FFF;
   text-align: center;
   width: 100%;
+  font-size: 1.5vw;
 }
 
 .tool:hover {
   cursor: pointer;
+  background-color: #AAA;
 }
 
 .row1 {

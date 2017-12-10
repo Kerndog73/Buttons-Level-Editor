@@ -1,3 +1,7 @@
+#properties {
+  background-color: #555;
+}
+
 #properties table {
   margin-bottom: 10px;
   width: calc(100% - 8px);
