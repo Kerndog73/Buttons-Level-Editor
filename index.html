@@ -16,40 +16,59 @@
       </div>
 
       <div id="tools" class="panel">
-        <table>
-          <tbody>
-          <tr>
-            <td id="select_tool" class="tool enabled" title="Select">Select</td>
-            <td id="player_tool" class="tool" title="Create player">Player</td>
-            <td id="exit_tool" class="tool" title="Create exit">Exit</td>
-            <td id="platform_tool" class="tool" title="Create platform">Platform</td>
-            <td id="box_tool" class="tool" title="Create box">Box</td>
-            <td id="key_tool" class="tool" title="Create key">Key</td>
-            <td id="lock_tool" class="tool" title="Create lock">Lock</td>
-          </tr>
-          <tr>
-            <td id="button_tool" class="tool" title="Create button">Button</td>
-            <td id="switch_tool" class="tool" title="Create switch">Switch</td>
-            <td id="door_tool" class="tool" title="Create door">Door</td>
-            <td id="moving_platform_tool" class="tool" title="Create moving platform">Moving Platform</td>
-            <td id="laser_emitter_tool" class="tool" title="Create laser emitter">Laser Emitter</td>
-            <td id="laser_detector_tool" class="tool" title="Create laser detector">Laser Detector</td>
-            <td id="text_tool" class="tool" title="Create text">Text</td>
-          </tr>
-          </tbody>
-        </table>
+        <div id="select_tool" style="grid-column: 1" class="row1 tool enabled">
+          <span>Select</span>
+        </div>
+        <div id="player_tool" style="grid-column: 2"  class="row1 tool">
+          <span>Player</span>
+        </div>
+        <div id="exit_tool" style="grid-column: 3"  class="row1 tool">
+          <span>Exit</span>
+        </div>
+        <div id="platform_tool" style="grid-column: 4"  class="row1 tool">
+          <span>Platform</span>
+        </div>
+        <div id="box_tool" style="grid-column: 5"  class="row1 tool">
+          <span>Box</span>
+        </div>
+        <div id="key_tool" style="grid-column: 6"  class="row1 tool">
+          <span>Key</span>
+        </div>
+        <div id="lock_tool" style="grid-column: 7"  class="row1 tool">
+          <span>Lock</span>
+        </div>
+
+        <div id="button_tool" style="grid-column: 1"  class="row2 tool">
+          <span>Button</span>
+        </div>
+        <div id="switch_tool" style="grid-column: 2"  class="row2 tool">
+          <span>Switch</span>
+        </div>
+        <div id="door_tool" style="grid-column: 3"  class="row2 tool">
+          <span>Door</span>
+        </div>
+        <div id="moving_platform_tool" style="grid-column: 4"  class="row2 tool">
+          <span>Moving Platform</span>
+        </div>
+        <div id="laser_emitter_tool" style="grid-column: 5"  class="row2 tool">
+          <span>Laser Emitter</span>
+        </div>
+        <div id="laser_detector_tool" style="grid-column: 6"  class="row2 tool">
+          <span>Laser Detector</span>
+        </div>
+        <div id="text_tool" style="grid-column: 7"  class="row2 tool">
+          <span>Text</span>
+        </div>
       </div>
 
       <div id="properties" class="panel"></div>
       <div id="operations" class="panel">
-        <table>
-          <tbody>
-          <tr>
-            <td id="open_op" title="Open">Open</td>
-            <td id="save_op" title="Save">Save</td>
-          </tr>
-          </tbody>
-        </table>
+        <div id="open_op" class="operation">
+          <span>Open</span>
+        </div>
+        <div id="save_op" class="operation">
+          <span>Save</span>
+        </div>
         <input id="file_opener" class="hidden" type="file" accept=".jsonnet" />
         <a id="file_saver" class="hidden" download="My level.jsonnet"></a>
       </div>

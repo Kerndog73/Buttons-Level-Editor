@@ -10,34 +10,30 @@ body {
   height: 100%;
   grid-template-rows: 10% 90%;
   grid-template-columns: 80% 20%;
-}
-
-.panel {
-
+  background-color: black;
+  grid-gap: 4px;
 }
 
 #tools {
-  background-color: red;
-  grid-row: 1 / 2;
-  grid-column: 1 / 2;
+  grid-row: 1;
+  grid-column: 1;
 }
 
 #editor {
   background-color: lime;
-  grid-row: 2 / 3;
-  grid-column: 1 / 2;
+  grid-row: 2;
+  grid-column: 1;
 }
 
 #properties {
   background-color: blue;
-  grid-row: 2 / 3;
-  grid-column: 2 / 3;
+  grid-row: 2;
+  grid-column: 2;
 }
 
 #operations {
-  background-color: cyan;
-  grid-row: 1 / 2;
-  grid-column: 2 / 3;
+  grid-row: 1;
+  grid-column: 2;
 }
 
 .hidden {
