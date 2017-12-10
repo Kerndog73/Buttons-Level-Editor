@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <title>Level Editor</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="editor.css" />
-    <link rel="stylesheet" href="tools.css" />
-    <link rel="stylesheet" href="properties.css" />
-    <link rel="stylesheet" href="operations.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/editor.css" />
+    <link rel="stylesheet" href="css/tools.css" />
+    <link rel="stylesheet" href="css/properties.css" />
+    <link rel="stylesheet" href="css/operations.css" />
   </head>
   <body>
-    <div id="editor" class="area">
-      <canvas></canvas>
-    </div>
+    <div id="panel_container">
+      <div id="editor" class="panel">
+        <canvas></canvas>
+      </div>
 
-    <div id="tools" class="area">
-      <table>
-        <tbody>
+      <div id="tools" class="panel">
+        <table>
+          <tbody>
           <tr>
             <td id="select_tool" class="tool enabled" title="Select">Select</td>
             <td id="player_tool" class="tool" title="Create player">Player</td>
@@ -35,39 +36,40 @@
             <td id="laser_detector_tool" class="tool" title="Create laser detector">Laser Detector</td>
             <td id="text_tool" class="tool" title="Create text">Text</td>
           </tr>
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
 
-    <div id="properties" class="area"></div>
-    <div id="operations" class="area">
-      <table>
-        <tbody>
+      <div id="properties" class="panel"></div>
+      <div id="operations" class="panel">
+        <table>
+          <tbody>
           <tr>
             <td id="open_op" title="Open">Open</td>
             <td id="save_op" title="Save">Save</td>
           </tr>
-        </tbody>
-      </table>
-      <input id="file_opener" class="hidden" type="file" accept=".jsonnet" />
-      <a id="file_saver" class="hidden" download="My level.jsonnet"></a>
+          </tbody>
+        </table>
+        <input id="file_opener" class="hidden" type="file" accept=".jsonnet" />
+        <a id="file_saver" class="hidden" download="My level.jsonnet"></a>
+      </div>
     </div>
 
-    <script src="Libraries/jquery-3.2.1.min.js"></script>
-    <script src="Utils/constant%20property.js"></script>
-    <script src="Utils/vec.js"></script>
-    <script src="Utils/rect.js"></script>
-    <script src="Utils/entity%20properties.js"></script>
-    <script src="Utils/entity%20rectangles.js"></script>
-    <script src="Utils/entity%20renderers.js"></script>
-    <script src="Utils/entity%20classes.js"></script>
-    <script src="Utils/property%20list.js"></script>
-    <script src="Utils/tool%20classes.js"></script>
-    <script src="Utils/entities.js"></script>
-    <script src="main.js"></script>
-    <script src="editor.js"></script>
-    <script src="tools.js"></script>
-    <script src="properties.js"></script>
-    <script src="operations.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/utils/constant%20property.js"></script>
+    <script src="js/utils/vec.js"></script>
+    <script src="js/utils/rect.js"></script>
+    <script src="js/utils/entity%20properties.js"></script>
+    <script src="js/utils/entity%20rectangles.js"></script>
+    <script src="js/utils/entity%20renderers.js"></script>
+    <script src="js/utils/entity%20classes.js"></script>
+    <script src="js/utils/property%20list.js"></script>
+    <script src="js/utils/tool%20classes.js"></script>
+    <script src="js/utils/entities.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/properties.js"></script>
+    <script src="js/operations.js"></script>
   </body>
 </html>

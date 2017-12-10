@@ -15,8 +15,6 @@ $(document).ready(function() {
   setupCanvas();
 
   $(window).resize(onWindowResize);
-  //The window resize event doesn't always fire when the window is resized
-  setInterval(onWindowResize, 500);
   onWindowResize();
 
   canvas.mouseleave(onMouseLeave);
@@ -52,13 +50,9 @@ function onWindowResize() {
   if (canvasRatio > canvasContainerRatio) {
     canvas.css("left", "0");
     canvas.css("top", (canvasContainer.height() - canvasElementSize.y) / 2 + "px");
-    canvas.width(canvasContainer.width());
-    canvas.height("auto");
   } else {
     canvas.css("left", (canvasContainer.width() - canvasElementSize.x) / 2 + "px");
     canvas.css("top", "0");
-    canvas.width("auto");
-    canvas.height(canvasContainer.height());
   }
 }
 
@@ -90,7 +84,7 @@ function onMouseUp() {
 
 function setupCanvas() {
   canvasContainer = $("#editor");
-  canvas = canvasContainer.children("canvas");
+  canvas = $("#editor canvas");
   canvas.attr("width", PIXELS.x);
   canvas.attr("height", PIXELS.y);
   ctx = canvas[0].getContext("2d");
@@ -105,7 +99,7 @@ function renderGrid() {
 
   ctx.beginPath();
 
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 4;
   ctx.strokeStyle = "#FFF";
 
   for (let x = TILE.x; x < PIXELS.x; x += TILE.x) {
