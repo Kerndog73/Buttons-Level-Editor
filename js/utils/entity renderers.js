@@ -170,7 +170,7 @@ function renderLaserEmitter(ctx, props) {
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
     ctx.lineTo(end.x, end.y);
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 4;
     ctx.strokeStyle = "rgb(255, 0, 0)";
     ctx.stroke();
     ctx.scale(scale.x, scale.y);
