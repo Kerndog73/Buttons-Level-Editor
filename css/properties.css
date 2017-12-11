@@ -1,49 +1,59 @@
-#properties {
-  background-color: #555;
+#properties {overflow-x: hidden;overflow-y: scroll;}
+
+.entity {
+  width: 100%;
+  background-color: #000;
+  margin-bottom: 32px;
+  padding-top: 4px;
 }
 
-#properties table {
-  margin-bottom: 10px;
-  width: calc(100% - 8px);
-  display: block;
-  border-collapse: collapse;
-  border-spacing: 0;
-  border: black 4px solid;
+.entity:first-child {
+  padding-top: 0 !important;
 }
 
-#properties table tr {
-  border-bottom: black 4px solid;
+.entity_name {
+  width: 100%;
+  height: 2em;
+  margin-bottom: 4px;
 }
 
-#properties table tr:last-child {
-  border-bottom: none;
+.entity_name span {
+  font-size: 2em;
+  color: #FFF;
 }
 
-#properties td {
-  padding: 0;
+.property {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 4px;
 }
 
-#properties .key_cell {
-  border-right: 2px solid black;
+.key_cell {
+  width: calc(30% - 8px / 3);
+}
+.val_cell {
+  width: calc(60% - 8px / 3);
+}
+.rem_cell {
+  width: calc(10% - 8px / 3);
 }
 
-#properties input {
-  border: none;
-  padding: 3px;
+.key_cell {
+  display: flex;
+  align-items: center;
+}
+.key_cell span {
+  color: #FFF;
+  text-align: center;
+  width: 100%;
 }
 
-#properties input:focus {
-  border: 2px solid rgb(255, 0, 0);
-  padding: 1px;
-  outline: none;
+.rem_cell, .rem_cell .button {
+  height: 100%;
 }
 
-#properties .key_input {
-  box-sizing: content-box;
-  width: calc(100% - 6px);
-}
-
-#properties .val_string, #properties .val_number {
-  box-sizing: content-box;
-  width: calc(100% - 6px);
+.property > div, .entity_name {
+  background-color: #333;
 }

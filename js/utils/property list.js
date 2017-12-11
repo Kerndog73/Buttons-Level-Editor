@@ -14,39 +14,36 @@ class PropertyList {
   update() {
     this.element.empty();
     for (const entity of this.list) {
-      let div = $(String.raw`<div>
-        <span class="entity_name">${entity.name}</span>
-        <table>
-          <tbody></tbody>
-        </table>
+      let div = $(String.raw`<div class="entity">
+        <div class="entity_name">
+          <span>${entity.name}</span>
+        </div>
       </div>`);
       this.element.append(div);
-      let tbody = div.find("tbody");
 
       for (const key in entity.props) {
-        tbody.append(this.createKeyValPair(entity.props, key, entity.getPropType(key)));
+        div.append(this.createProperty(entity.props, key, entity.getPropType(key)));
       }
 
-      tbody.append(this.createInsertButton(entity));
+      div.append(this.createInsertButton(entity));
     }
   }
 
   createInsertButton(entity) {
-    let row = $(String.raw`<tr>
-      <td>
-        <button class="insert_prop">Insert Property</button>
-      </td>
-      <td>
-        <select class="select_prop_type"></select>
-      </td>
-    </tr>`);
+    let row = $(String.raw`<div class="insert_prop">
+      <div class="button">
+        <span>Insert Property</span>
+      </div>
+      <select></select>
+    </div>`);
 
     if (Object.keys(entity.props).length === entity.defs.size) {
       row.css("display", "none");
     }
 
-    let button = row.find("button");
-    let select = row.find("select");
+    let children = row.children();
+    let button = $(children[0]);
+    let select = $(children[1]);
 
     for (let [propName] of entity.defs) {
       if (!entity.props.hasOwnProperty(propName)) {
@@ -60,7 +57,7 @@ class PropertyList {
       const propName = select.val();
       select.children(`option[value="${propName}"]`).remove();
       entity.createProp(propName);
-      row.before(that.createKeyValPair(entity.props, propName, entity.getPropType(propName)));
+      row.before(that.createProperty(entity.props, propName, entity.getPropType(propName)));
 
       if (select.children().length === 0) {
         row.css("display", "none");
@@ -77,35 +74,41 @@ class PropertyList {
     return e;
   }
 
-  createKeyValPair(props, key, type) {
-    let row = $(String.raw`<tr>
-      <td class="key_cell"></td>
-      <td class="val_cell"></td>
-      <td class="rem_cell"></td>
-    </tr>`);
-    row.children(".key_cell").append(this.createKeyInput(key));
-    row.children(".val_cell").append(this.createValueInput(props, key, type));
-    row.children(".rem_cell").append(this.createRemButton(row, props, key));
-    return row;
+  createProperty(props, key, type) {
+    let property = $(String.raw`<div class="property">
+      <div class="key_cell"></div>
+      <div class="val_cell"></div>
+      <div class="rem_cell"></div>
+    </div>`);
+    let children = property.children();
+    $(children[0]).append(this.createKey(key));
+    $(children[1]).append(this.createValue(props, key, type));
+    $(children[2]).append(this.createRemButton(property, props, key));
+    return property;
   }
 
-  createRemButton(row, props, key) {
-    let e = $(String.raw`<button class="rem_button">X</button>`);
+  createRemButton(property, props, key) {
+    let e = $(String.raw`<div class="rem_button button">
+      <span>X</span>
+    </div>`);
     e.click(function() {
-      row.remove();
+      property.remove();
       //JavaScript is so weird
       delete props[key];
-      //   tbody    Add Property button
-      row.parent().children(":last-child").css("display", "initial");
+      console.log(property);
+      console.log(property.parent());
+      console.log(property.parent().children(".insert_prop"));
+      // parent of div.property is div.entity
+      property.parent().children(".insert_prop").css("display", "initial");
     });
     return e;
   }
 
-  createKeyInput(value) {
-    return $(String.raw`<input type="text" readonly value="${value}" />`);
+  createKey(key) {
+    return $(`<span>${key}</span>`);
   }
 
-  createValueInput(props, key, type) {
+  createValue(props, key, type) {
     switch (type) {
       case PropType.FLOAT:
         return this.createFloat(props, key);
