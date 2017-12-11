@@ -1,20 +1,33 @@
 "use strict";
 
-let Orient = {};
-makeConstProp(Orient, "UP", 0);
-makeConstProp(Orient, "RIGHT", 1);
-makeConstProp(Orient, "DOWN", 2);
-makeConstProp(Orient, "LEFT", 3);
+let Orient = makeEnum([
+  "UP",
+  "RIGHT",
+  "DOWN",
+  "LEFT"
+]);
 
-let PropType = {};
-makeConstProp(PropType, "NONE", 0);
-makeConstProp(PropType, "FLOAT", 1);
-makeConstProp(PropType, "UINT", 2);
-makeConstProp(PropType, "VEC", 3);
-makeConstProp(PropType, "ORIENT", 4);
-makeConstProp(PropType, "STRING", 5);
-makeConstProp(PropType, "ARRAY", 6);
-makeConstProp(PropType, "BOOL", 7);
+let BoolOp = makeEnum([
+  "AND",
+  "OR",
+  "XOR",
+  "NAND",
+  "NOR",
+  "XNOR",
+  "NOT"
+]);
+
+let PropType = makeEnum([
+  "NONE",
+  "FLOAT",
+  "UINT",
+  "VEC",
+  "ORIENT",
+  "STRING",
+  "ARRAY",
+  "BOOL",
+  "BOOL_OP"
+]);
 
 function isUint(value) {
   return typeof(value) === "number" && value === (value | 0) && value >= 0;
@@ -31,13 +44,16 @@ function isType(propType, prop) {
     case PropType.VEC:
       return prop instanceof Vec && isUint(prop.x) && isUint(prop.y);
     case PropType.ORIENT:
-      return isUint(prop) && 0 <= prop && prop <= 3;
+      return isUint(prop) && prop < Orient.length;
     case PropType.STRING:
       return typeof(prop) === "string";
     case PropType.ARRAY:
       return prop instanceof Array && prop.every(isUint);
-    case PropType.BOOLEAN:
+    case PropType.BOOL:
       return typeof(prop) === "boolean";
+    case PropType.BOOL_OP:
+      return isUint(prop) && prop < BoolOp.length;
+
     default:
       console.error("Invalid property type", propType);
       return false;
@@ -69,7 +85,7 @@ const inputDef = new Map([
   ["active", [PropType.BOOL, false]],
   ["in", [PropType.ARRAY, []]],
   ["on", [PropType.BOOL, false]],
-  ["operator", [PropType.STRING, "and"]]
+  ["operator", [PropType.BOOL_OP, BoolOp.AND]]
 ]);
 
 const doorDef = new Map([

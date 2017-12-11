@@ -41,9 +41,8 @@ class PropertyList {
       row.css("display", "none");
     }
 
-    let children = row.children();
-    let button = $(children[0]);
-    let select = $(children[1]);
+    let button = row.children("div");
+    let select = row.children("select");
 
     for (let [propName] of entity.defs) {
       if (!entity.props.hasOwnProperty(propName)) {
@@ -80,10 +79,9 @@ class PropertyList {
       <div class="val_cell"></div>
       <div class="rem_cell"></div>
     </div>`);
-    let children = property.children();
-    $(children[0]).append(this.createKey(key));
-    $(children[1]).append(this.createValue(props, key, type));
-    $(children[2]).append(this.createRemButton(property, props, key));
+    property.children(".key_cell").append(this.createKey(key));
+    property.children(".val_cell").append(this.createValue(props, key, type));
+    property.children(".rem_cell").append(this.createRemButton(property, props, key));
     return property;
   }
 
@@ -122,10 +120,12 @@ class PropertyList {
         return this.createString(props, key);
       case PropType.ARRAY:
         return this.createArray(props, key);
-      case PropType.BOOLEAN:
-        return this.createBoolean(props, key);
+      case PropType.BOOL:
+        return this.createBool(props, key);
+      case PropType.BOOL_OP:
+        return this.createBoolOp(props, key);
       default:
-        console.error("Invalid property type passes to PropertyList::createValueInput", type);
+        console.error("Invalid property type passed to PropertyList::createValue", type);
         return null;
     }
   }
@@ -176,9 +176,14 @@ class PropertyList {
     });
     return e;
   }
-  createBoolean(props, key) {
+  createBool(props, key) {
     let e = this.createEnum(Boolean, props, key);
-    e.addClass("val_boolean");
+    e.addClass("val_bool");
+    return e;
+  }
+  createBoolOp(props, key) {
+    let e = this.createEnum(BoolOp, props, key);
+    e.addClass("val_bool_op");
     return e;
   }
 
