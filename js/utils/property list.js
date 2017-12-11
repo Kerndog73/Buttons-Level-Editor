@@ -32,7 +32,7 @@ class PropertyList {
   createInsertButton(entity) {
     let row = $(String.raw`<div class="insert_prop">
       <div class="button">
-        <span>Insert Property</span>
+        <span>Insert</span>
       </div>
       <select></select>
     </div>`);
@@ -86,7 +86,7 @@ class PropertyList {
   }
 
   createRemButton(property, props, key) {
-    let e = $(String.raw`<div class="rem_button button">
+    let e = $(String.raw`<div class="rem_button">
       <span>X</span>
     </div>`);
     e.click(function() {
@@ -164,15 +164,33 @@ class PropertyList {
   }
   createArray(props, key) {
     let e = $(String.raw`<div class="val_array"></div>`);
-    for (let i in props[key]) {
-      e.append(this.createUint(props[key], i));
+    let array = props[key];
+    for (let i in array) {
+      let item = $(`<div class="item"></div>`);
+      item.append(this.createUint(array, i));
+      item.append(this.createArrayRemButton(item, array, i));
+      e.append(item);
     }
-    let button = $(String.raw`<button class="array_insert_button">Insert</button>`);
+    let button = $(String.raw`<div class="array_insert button">
+      <span>Insert</span>
+    </div>`);
     e.append(button);
     let that = this;
     button.click(function() {
-      props[key].push(0);
-      button.before(that.createUint(props[key], props[key].length - 1));
+      array.push(0);
+      let item = $(`<div class="item"></div>`);
+      item.append(that.createUint(array, array.length - 1));
+      item.append(that.createArrayRemButton(item, array, array.length - 1));
+      button.before(item);
+    });
+    return e;
+  }
+  createArrayRemButton(item, array, i) {
+    let e = $(String.raw`<div class="rem_button">
+      <span>X</span>
+    </div>`);
+    e.click(function() {
+      //array.splice(i, 1);
     });
     return e;
   }

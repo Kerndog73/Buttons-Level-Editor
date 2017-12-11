@@ -1,13 +1,13 @@
-.button, .radio {
+.button, .radio, .rem_button {
   display: flex;
   align-items: center;
 }
 
-.button span, .radio span {
+.button span, .radio span, .rem_button span {
   text-align: center;
   width: 100%;
 }
 
-.button:hover, .radio:hover {
+.button:hover, .radio:hover, .rem_button:hover {
   cursor: pointer;
 }

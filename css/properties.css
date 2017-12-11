@@ -48,14 +48,50 @@
   color: #FFF;
   text-align: left;
   width: 100%;
+  white-space: nowrap;
+  overflow: scroll;
 }
 
-.rem_cell, .rem_cell .button {
+.rem_cell {
+  height: auto;
+}
+.rem_cell .rem_button {
   height: 100%;
 }
 
-.property > div, .entity_name {
+.key_cell, .entity_name {
   background-color: #333;
+}
+
+
+.insert_prop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+.insert_prop > .button {
+  width: calc(60% - 2px);
+}
+.insert_prop > select {
+  width: calc(40% - 2px);
+}
+
+.entity select:focus {
+  outline: none;
+}
+.entity select {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 1em;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+.entity option {
+
 }
 
 /*
@@ -63,6 +99,26 @@
 ---------------------------------  VALUES  -------------------------------------
 --------------------------------------------------------------------------------
 */
+
+.val_cell input {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: 1em;
+}
+.val_cell input:focus {
+  outline: #00F solid 2px;
+}
+
+/*-------------------------------  FLOAT  ------------------------------------*/
+.val_float {
+  width: 100%;
+}
+
+/*-------------------------------  UINT  -------------------------------------*/
+.val_cell > .val_uint {
+  width: 100%;
+}
 
 /*--------------------------------  VEC  -------------------------------------*/
 .val_vec {
@@ -75,22 +131,51 @@
   width: calc(50% - 2px);
 }
 
-/*-------------------------------  UINT  -------------------------------------*/
-.val_cell > .val_uint {
+/*------------------------------  ORIENT  ------------------------------------*/
+.val_orient {
   width: 100%;
-}
-.val_uint {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  font-size: 1em;
 }
 
 /*------------------------------  STRING  ------------------------------------*/
 .val_string {
   width: 100%;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  font-size: 1em;
+}
+
+/*-------------------------------  ARRAY  ------------------------------------*/
+.val_array {
+  background-color: #000;
+}
+.val_array .item {
+  width: 100%;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.val_array .rem_button {
+  /*
+  .val_cell has a width of 60%
+  .rem_cell has a width of 10%
+  .val_array is as wide .val_cell so percentage units are relative to the width
+  of .val_cell.
+  We divide by 60 and multiply by 100 to get a percentage relative to .property.
+  We then multiply 10% to get the size of .property > .rem_button relative to
+  the size of .val_cell.
+  Finally, we subtract 2px from both the .rem_button and the .val_uint to create
+  a 4px border between them.
+  */
+  width: calc(1000% / 60 - 2px);
+}
+.val_array .val_uint {
+  width: calc(100% - 1000% / 60 - 2px);
+}
+
+/*-------------------------------  BOOL  -------------------------------------*/
+.val_bool {
+  width: 100%;
+}
+
+/*-----------------------------  BOOL_OP  ------------------------------------*/
+.val_bool_op {
+  width: 100%;
 }
