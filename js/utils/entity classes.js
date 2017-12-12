@@ -19,9 +19,6 @@ class Entity {
     makeConstProp(this, "defs", mergeMaps(defs));
   }
 
-  getName() {
-    return this.name;
-  }
   getRect() {
     return this.rect.getRect(this.props);
   }
@@ -37,18 +34,10 @@ class Entity {
       return PropType.NONE;
     }
   }
-  setProp(name, value) {
-    const def = this.defs.get(name);
-    if (def !== undefined && isType(def[0], value)) {
-      this.props[name] = value;
-    } else {
-      console.error("Tried to invalid entity property", this);
-    }
-  }
   createProp(name) {
     const def = this.defs.get(name);
     if (def !== undefined && !this.props.hasOwnProperty(name)) {
-      this.props[name] = def[1];
+      this.props[name] = copyProp(def[0], def[1]);
     } else {
       console.error("Tried to create invalid entity property", name, this);
     }

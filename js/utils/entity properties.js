@@ -1,13 +1,13 @@
 "use strict";
 
-let Orient = makeEnum([
+const Orient = makeEnum([
   "UP",
   "RIGHT",
   "DOWN",
   "LEFT"
 ]);
 
-let BoolOp = makeEnum([
+const BoolOp = makeEnum([
   "AND",
   "OR",
   "XOR",
@@ -17,7 +17,7 @@ let BoolOp = makeEnum([
   "NOT"
 ]);
 
-let PropType = makeEnum([
+const PropType = makeEnum([
   "NONE",
   "FLOAT",
   "UINT",
@@ -59,6 +59,16 @@ function isType(propType, prop) {
       return false;
   }
 };
+
+function copyProp(propType, prop) {
+  if (propType === PropType.ARRAY) {
+    return prop.slice();
+  } else if (propType === PropType.VEC) {
+    return prop.clone();
+  } else {
+    return prop;
+  }
+}
 
 const posDef = new Map([
   ["pos", [PropType.VEC, new Vec(0, 0)]]
@@ -109,5 +119,5 @@ const detectorDef = new Map([
 
 const textDef = new Map([
   ["font size", [PropType.UINT, 32]],
-  ["text", [PropType.STRING, ""]]
+  ["text", [PropType.STRING, "This is some text"]]
 ]);

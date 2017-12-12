@@ -144,14 +144,7 @@ function renderLaserEmitter(ctx, props) {
   const orient = getOr(props, "orient", Orient.UP);
 
   if (props.hasOwnProperty("end")) {
-    const startTable = {
-      [Orient.UP]: new Vec(0.5, 0.0),
-      [Orient.RIGHT]: new Vec(0.0, 0.5),
-      [Orient.DOWN]: new Vec(0.5, 1.0),
-      [Orient.LEFT]: new Vec(1.0, 0.5)
-    };
-
-    const endTable = {
+    const table = {
       [Orient.UP]: new Vec(0.5, 1.0),
       [Orient.RIGHT]: new Vec(1.0, 0.5),
       [Orient.DOWN]: new Vec(0.5, 0.0),
@@ -159,13 +152,16 @@ function renderLaserEmitter(ctx, props) {
     };
 
     const scale = new Vec(32, 32);
-    let start = getOr(props, "start", Vec.ZERO);
-    start.add(startTable[orient]);
+    const pos = getOr(props, "start", Vec.ZERO);
+    let start = pos.clone();
+    start.add(table[orient]);
     start.mul(scale);
-    let end = props.end;
-    end.add(endTable[orient]);
+    let end = props.end.clone();
+    end.add(table[orient]);
     end.mul(scale);
 
+    const mat = ctx.currentTransform;
+    ctx.translate(-pos.x, -pos.y);
     ctx.scale(1.0 / scale.x, 1.0 / scale.y);
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
@@ -173,7 +169,7 @@ function renderLaserEmitter(ctx, props) {
     ctx.lineWidth = 4;
     ctx.strokeStyle = "rgb(255, 0, 0)";
     ctx.stroke();
-    ctx.scale(scale.x, scale.y);
+    ctx.setTransform(mat.a, mat.b, mat.c, mat.d, mat.e, mat.f);
   }
 
   orientTransform(ctx, orient);

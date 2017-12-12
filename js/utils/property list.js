@@ -263,7 +263,7 @@ class InserterElement {
       let inserter = $(this).parent();
       let select = inserter.children("select");
       const propName = select.val();
-      select.children(`option[value=${propName}]`).remove();
+      select.children(`option[value="${propName}"]`).remove();
       if (select.children().length === 0) {
         inserter.hide();
       }
