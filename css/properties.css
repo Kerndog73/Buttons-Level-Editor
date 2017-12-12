@@ -1,4 +1,18 @@
-#properties {overflow-x: hidden;overflow-y: scroll;}
+#properties {
+  border-radius: 8px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.entity_name {
+  font-size: 4em;
+}
+.property {
+  font-size: 2em;
+}
+.insert_prop {
+  font-size: 2em;
+}
 
 .entity {
   width: 100%;
@@ -6,20 +20,20 @@
   margin-bottom: 32px;
   padding-top: 4px;
 }
-
 .entity:first-child {
   padding-top: 0 !important;
 }
 
 .entity_name {
+  border-radius: 8px;
   width: 100%;
-  height: 2em;
   margin-bottom: 4px;
+  color: #FFF;
 }
 
-.entity_name span {
-  font-size: 2em;
-  color: #FFF;
+.key_cell, .entity_name {
+  text-indent: 4px;
+  background-color: #333;
 }
 
 .property {
@@ -41,6 +55,7 @@
 }
 
 .key_cell {
+  border-radius: 8px;
   display: flex;
   align-items: center;
 }
@@ -57,10 +72,6 @@
 }
 .rem_cell .rem_button {
   height: 100%;
-}
-
-.key_cell, .entity_name {
-  background-color: #333;
 }
 
 .insert_prop {
@@ -80,11 +91,12 @@
   outline: none;
 }
 .entity select {
+  border-radius: 8px;
+  font-size: inherit;
+  text-indent: 4px;
   border: none;
-  border-radius: 0;
   padding: 0;
   margin: 0;
-  font-size: 1em;
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -97,22 +109,24 @@
 */
 
 .val_cell input {
+  border-radius: 8px;
+  font-size: inherit;
+  text-indent: 4px;
   padding: 0;
   margin: 0;
   border: 0;
-  font-size: 1em;
 }
 .val_cell input:focus {
   outline: #00F solid 2px;
 }
 
 /*-------------------------------  FLOAT  ------------------------------------*/
-.val_float {
-  width: 100%;
-}
-
-/*-------------------------------  UINT  -------------------------------------*/
-.val_cell > .val_uint {
+.val_float,
+.val_cell > .val_uint,
+.val_orient,
+.val_string,
+.val_bool,
+.val_bool_op {
   width: 100%;
 }
 
@@ -125,16 +139,6 @@
 }
 .val_vec > .val_uint {
   width: calc(50% - 2px);
-}
-
-/*------------------------------  ORIENT  ------------------------------------*/
-.val_orient {
-  width: 100%;
-}
-
-/*------------------------------  STRING  ------------------------------------*/
-.val_string {
-  width: 100%;
 }
 
 /*-------------------------------  ARRAY  ------------------------------------*/
@@ -164,14 +168,4 @@
 }
 .val_array .val_uint {
   width: calc(100% - 1000% / 60 - 2px);
-}
-
-/*-------------------------------  BOOL  -------------------------------------*/
-.val_bool {
-  width: 100%;
-}
-
-/*-----------------------------  BOOL_OP  ------------------------------------*/
-.val_bool_op {
-  width: 100%;
 }

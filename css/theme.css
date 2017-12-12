@@ -1,6 +1,7 @@
 .button, .radio, .rem_button {
   display: flex;
   align-items: center;
+  border-radius: 8px;
 }
 
 .button span, .radio span, .rem_button span {

@@ -7,15 +7,15 @@
 }
 
 .enabled {
-  background-color: #CCC !important;
+  background: linear-gradient(#FFF, #666) !important;
 }
 
 .button, .radio {
-  background-color: #888;
+  background: linear-gradient(#AAA, #555);
 }
 
 .button:hover, .radio:hover {
-  background-color: #AAA;
+  background: linear-gradient(#555, #AAA);
 }
 
 .button span, .radio span, .rem_button span {
@@ -23,8 +23,8 @@
 }
 
 .rem_button {
-  background-color: #F00;
+  background: linear-gradient(#FF7070, #BF0000);
 }
 .rem_button:hover {
-  background-color: #FF7F7F;
+  background: linear-gradient(#BF0000, #FF7070);
 }
