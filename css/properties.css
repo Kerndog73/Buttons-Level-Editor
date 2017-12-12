@@ -31,13 +31,13 @@
 }
 
 .key_cell {
-  width: calc(30% - 8px / 3);
+  width: calc(30% - 2px);
 }
 .val_cell {
-  width: calc(60% - 8px / 3);
+  width: calc(60% - 4px);
 }
 .rem_cell {
-  width: calc(10% - 8px / 3);
+  width: calc(10% - 2px);
 }
 
 .key_cell {
@@ -62,7 +62,6 @@
 .key_cell, .entity_name {
   background-color: #333;
 }
-
 
 .insert_prop {
   display: flex;
@@ -89,9 +88,6 @@
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-}
-.entity option {
-
 }
 
 /*

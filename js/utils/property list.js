@@ -1,112 +1,100 @@
 "use strict";
 
-class PropertyList {
-  constructor(element) {
-    this.element = element;
-    this.list = [];
+function isUpper(char) {
+  console.assert(char.length === 1);
+  const code = char.charCodeAt(0);
+  return 65 <= code && code <= 90;
+}
+
+function spaceBeforeCaps(string) {
+  let newString = "";
+  if (string.length !== 0) {
+    newString += string[0];
+    for (let i = 1; i != string.length; ++i) {
+      const char = string[i];
+      if (isUpper(char)) {
+        newString += " ";
+      }
+      newString += char;
+    }
+  }
+  return newString;
+}
+
+function createOption(name) {
+  return $(`<option value="${name}">${name}</option>`)
+}
+
+class EntityElement {
+  constructor(entity) {
+    this.entity = entity;
+    this.element = this.createElement();
+    this.properties = new PropertiesElement(entity, this);
+    this.inserter = new InserterElement(entity, this);
+
+    this.element.append(this.properties.element);
+    this.element.append(this.inserter.element);
   }
 
-  setList(entities) {
-    this.list = entities;
-    this.update();
+  createElement() {
+    return $(String.raw`<div class="entity">
+      <div class="entity_name">
+        <span>${spaceBeforeCaps(this.entity.name)}</span>
+      </div>
+    </div>`);
+  }
+
+  update() {
+    this.properties.update();
+    this.inserter.update();
+  }
+
+  appendProperty(key, type) {
+    this.properties.appendProperty(key, type);
+  }
+  removeProperty(key) {
+    this.inserter.removeProperty(key);
+  }
+}
+
+class PropertiesElement {
+  constructor(entity, entityElement) {
+    this.entity = entity;
+    this.entityElement = entityElement;
+    this.element = $(`<div class="properties"></div>`);
   }
 
   update() {
     this.element.empty();
-    for (const entity of this.list) {
-      let div = $(String.raw`<div class="entity">
-        <div class="entity_name">
-          <span>${entity.name}</span>
-        </div>
-      </div>`);
-      this.element.append(div);
-
-      for (const key in entity.props) {
-        div.append(this.createProperty(entity.props, key, entity.getPropType(key)));
-      }
-
-      div.append(this.createInsertButton(entity));
+    let entityProps = this.entity.props;
+    for (const key in entityProps) {
+      this.appendProperty(key, this.entity.getPropType(key));
     }
   }
 
-  createInsertButton(entity) {
-    let row = $(String.raw`<div class="insert_prop">
-      <div class="button">
-        <span>Insert</span>
-      </div>
-      <select></select>
-    </div>`);
-
-    if (Object.keys(entity.props).length === entity.defs.size) {
-      row.css("display", "none");
-    }
-
-    let button = row.children("div");
-    let select = row.children("select");
-
-    for (let [propName] of entity.defs) {
-      if (!entity.props.hasOwnProperty(propName)) {
-        select.append(this.createSimpleOption(propName));
-      }
-    }
-    select.children(":first-child").attr("selected", "");
-
-    let that = this;
-    button.click(function() {
-      const propName = select.val();
-      select.children(`option[value="${propName}"]`).remove();
-      entity.createProp(propName);
-      row.before(that.createProperty(entity.props, propName, entity.getPropType(propName)));
-
-      if (select.children().length === 0) {
-        row.css("display", "none");
-      }
-    });
-
-    return row;
+  appendProperty(key, type) {
+    this.element.append(this.createProperty(key, type));
   }
 
-  createSimpleOption(value) {
-    let e = $(document.createElement("option"));
-    e.val(value);
-    e.html(value);
-    return e;
-  }
-
-  createProperty(props, key, type) {
-    let property = $(String.raw`<div class="property">
-      <div class="key_cell"></div>
-      <div class="val_cell"></div>
-      <div class="rem_cell"></div>
-    </div>`);
-    property.children(".key_cell").append(this.createKey(key));
-    property.children(".val_cell").append(this.createValue(props, key, type));
-    property.children(".rem_cell").append(this.createRemButton(property, props, key));
-    return property;
-  }
-
-  createRemButton(property, props, key) {
-    let e = $(String.raw`<div class="rem_button">
-      <span>X</span>
-    </div>`);
-    e.click(function() {
-      property.remove();
-      //JavaScript is so weird
-      delete props[key];
-      console.log(property);
-      console.log(property.parent());
-      console.log(property.parent().children(".insert_prop"));
-      // parent of div.property is div.entity
-      property.parent().children(".insert_prop").css("display", "initial");
-    });
-    return e;
+  createProperty(key, type) {
+    return $(`<div class="property"></div>`)
+      .append($(`<div class="key_cell"></div>`)
+        .append(this.createKey(key))
+      )
+      .append($(`<div class="val_cell"></div>`)
+        .append(this.createVal(key, type))
+      )
+      .append($(`<div class="rem_cell"></div>`)
+        .append(this.createRem(key))
+      )
+    ;
   }
 
   createKey(key) {
     return $(`<span>${key}</span>`);
   }
-
-  createValue(props, key, type) {
+  createVal(key, type) {
+    const props = this.entity.props;
     switch (type) {
       case PropType.FLOAT:
         return this.createFloat(props, key);
@@ -125,9 +113,21 @@ class PropertyList {
       case PropType.BOOL_OP:
         return this.createBoolOp(props, key);
       default:
-        console.error("Invalid property type passed to PropertyList::createValue", type);
+        console.error("Invalid property type passed to PropertiesElement::createVal", type);
         return null;
     }
+  }
+  createRem(key) {
+    let button = $(`<div class="rem_button">
+      <span>X</span>
+    </div>`);
+    let that = this;
+    button.click(function() {
+      that.entity.remProp(key);
+      $(this).closest(".property").remove();
+      that.entityElement.removeProperty(key);
+    });
+    return button;
   }
 
   createFloat(props, key) {
@@ -140,7 +140,7 @@ class PropertyList {
   createUint(props, key) {
     let e = $(String.raw`<input class="val_uint" type="number" min="0" step="1" value="${props[key]}" />`);
     e.change(function() {
-      props[key] = e.val() | 0;
+      props[key] = Math.max(0, e.val()) | 0;
     });
     return e;
   }
@@ -151,9 +151,7 @@ class PropertyList {
     return e;
   }
   createOrient(props, key) {
-    let e = this.createEnum(Orient, props, key);
-    e.addClass("val_orient");
-    return e;
+    return this.createEnum(Orient, props, key).addClass("val_orient");
   }
   createString(props, key) {
     let e = $(String.raw`<input class="val_string" type="text" value="${props[key]}" />`);
@@ -195,46 +193,115 @@ class PropertyList {
     return e;
   }
   createBool(props, key) {
-    let e = this.createEnum(Boolean, props, key);
+    let e = $(`<select></select>`);
+    e.append(createOption("FALSE"));
+    e.append(createOption("TRUE"));
+    e.val(props[key].toString().toUpperCase());
+    e.change(function() {
+      props[key] = (e.val() === "TRUE");
+    });
     e.addClass("val_bool");
     return e;
   }
   createBoolOp(props, key) {
-    let e = this.createEnum(BoolOp, props, key);
-    e.addClass("val_bool_op");
-    return e;
+    return this.createEnum(BoolOp, props, key).addClass("val_bool_op");
   }
 
   createEnum(enumObject, props, key) {
-    let e = $(document.createElement("select"));
+    let e = $(`<select></select>`);
     const value = props[key];
-    if (enumObject.name === "Boolean") {
-      e.append(this.createOption("FALSE", !value));
-      e.append(this.createOption("TRUE", value));
-    } else {
-      for (let enumName in enumObject) {
-        e.append(this.createOption(enumName, value === enumObject[enumName]));
+    for (let enumName in enumObject) {
+      e.append(createOption(enumName));
+      if (value === enumObject[enumName]) {
+        e.val(enumName);
       }
     }
     e.change(function() {
-      if (enumObject.name === "Boolean") {
-        props[key] = (e.val() === "TRUE");
-      } else {
-        props[key] = enumObject[e.val()];
-      }
+      props[key] = enumObject[e.val()];
     });
     return e;
   }
+}
 
-  createOption(enumValue, selected) {
-    let e = $(document.createElement("option"));
-    if (selected) {
-      e.attr("selected", "");
+class InserterElement {
+  constructor(entity, entityElement) {
+    this.entity = entity;
+    this.entityElement = entityElement;
+    this.element = $(`<div class="insert_prop"></div>`);
+  }
+
+  update() {
+    this.element.empty();
+    this.element.append(this.createInsertButton());
+    this.element.append(this.createInsertSelect());
+    if (this.needInserter()) {
+      this.element.show();
+    } else {
+      this.element.hide();
     }
-    e.attr("value", enumValue);
-    enumValue = enumValue.toLowerCase();
-    enumValue = enumValue[0].toUpperCase() + enumValue.substr(1);
-    e.html(enumValue);
-    return e;
+  }
+
+  needInserter() {
+    return Object.keys(this.entity.props).length !== this.entity.defs.size;
+  }
+
+  createInsertButton() {
+    let button = $(`<div class="button">
+      <span>Insert</span>
+    </div>`);
+    let that = this;
+    button.click(function() {
+      let inserter = $(this).parent();
+      let select = inserter.children("select");
+      const propName = select.val();
+      select.children(`option[value=${propName}]`).remove();
+      if (select.children().length === 0) {
+        inserter.hide();
+      }
+      that.entity.createProp(propName);
+      const type = that.entity.getPropType(propName);
+      that.entityElement.appendProperty(propName, type);
+    });
+    return button;
+  }
+
+  createInsertSelect() {
+    let select = $(`<select></select>`);
+    const entityProps = this.entity.props;
+    const entityDefs = this.entity.defs;
+    for (let [propName] of entityDefs) {
+      if (!entityProps.hasOwnProperty(propName)) {
+        createOption(propName).appendTo(select);
+      }
+    }
+    return select;
+  }
+
+  removeProperty(key) {
+    this.element.show();
+    let select = this.element.children("select");
+    select.append(createOption(key));
+  }
+}
+
+class PropertyList {
+  constructor(element) {
+    this.element = element;
+    this.entities = [];
+  }
+
+  setList(entities) {
+    this.element.empty();
+    this.entities = entities.map(entity => new EntityElement(entity));
+    for (const entity of this.entities) {
+      this.element.append(entity.element);
+    }
+    this.update();
+  }
+
+  update() {
+    for (const entity of this.entities) {
+      entity.update();
+    }
   }
 };

@@ -50,7 +50,14 @@ class Entity {
     if (def !== undefined && !this.props.hasOwnProperty(name)) {
       this.props[name] = def[1];
     } else {
-      console.error("Tried to create invalid entity property", this);
+      console.error("Tried to create invalid entity property", name, this);
+    }
+  }
+  remProp(name) {
+    if (name in this.props) {
+      delete this.props[name];
+    } else {
+      console.error("Tried to remove invalid entity property", name, this);
     }
   }
   render(ctx) {
