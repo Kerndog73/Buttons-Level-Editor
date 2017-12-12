@@ -7,7 +7,7 @@
 }
 
 .enabled {
-  background: linear-gradient(#FFF, #666) !important;
+  background: linear-gradient(#666, #222) !important;
 }
 
 .button, .radio {
