@@ -118,7 +118,7 @@ class PropertiesElement {
     }
   }
   createRem(key) {
-    let button = $(`<div class="rem_button">
+    let button = $(`<div class="rem_button" title="Remove property from entity">
       <span>X</span>
     </div>`);
     let that = this;
@@ -164,7 +164,7 @@ class PropertiesElement {
     let e = $(`<div class="val_array"></div>`);
     let array = props[key];
     e.append(this.createArrayItems(array));
-    let button = $(`<div class="array_insert button">
+    let button = $(`<div class="array_insert button" title="Insert item into array">
       <span>Insert</span>
     </div>`);
     e.append(button);
@@ -189,7 +189,7 @@ class PropertiesElement {
     return items;
   }
   createArrayRemButton(array, i) {
-    let e = $(`<div class="rem_button">
+    let e = $(`<div class="rem_button" title="Remove item from array">
       <span>X</span>
     </div>`);
     let that = this;
@@ -255,7 +255,7 @@ class InserterElement {
   }
 
   createInsertButton() {
-    let button = $(`<div class="button">
+    let button = $(`<div class="button" title="Insert property into entity">
       <span>Insert</span>
     </div>`);
     let that = this;

@@ -10,15 +10,14 @@ $(document).ready(function() {
     fileOpener.click();
   });
   $("#save_op").click(function() {
-    console.log(entitiesToJSONNET());
-    //const blob = new Blob([entitiesToJSONNET()], {type: "text/plain"});
-    //fileSaver.attr("href", URL.createObjectURL(blob));
-    //fileSaver[0].click();
+    const blob = new Blob([entitiesToJSONNET()], {type: "text/plain"});
+    fileSaver.attr("href", URL.createObjectURL(blob));
+    fileSaver[0].click();
   });
 });
 
 function entitiesToJSONNET() {
-  let string = `local e = import "entities.jsonnet";\n\n\n[\n`;
+  let string = `local e = import "entities.jsonnet";\n\n[\n`;
   for (const entity of entities.entities) {
     string += `  e.make${entity.name}(${propertiesToString(entity)}),\n`;
   }
@@ -27,7 +26,7 @@ function entitiesToJSONNET() {
 }
 
 function propertiesToString(entity) {
-  //without this check we'll return "{  }"
+  //without this check we'll return "{  }". Not acceptable.
   if (Object.keys(entity).length === 0) {
     return "{}";
   }
