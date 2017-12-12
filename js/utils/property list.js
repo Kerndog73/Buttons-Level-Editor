@@ -163,12 +163,7 @@ class PropertiesElement {
   createArray(props, key) {
     let e = $(String.raw`<div class="val_array"></div>`);
     let array = props[key];
-    for (let i in array) {
-      let item = $(`<div class="item"></div>`);
-      item.append(this.createUint(array, i));
-      item.append(this.createArrayRemButton(item, array, i));
-      e.append(item);
-    }
+    e.append(this.createArrayItems(array));
     let button = $(String.raw`<div class="array_insert button">
       <span>Insert</span>
     </div>`);
@@ -178,17 +173,31 @@ class PropertiesElement {
       array.push(0);
       let item = $(`<div class="item"></div>`);
       item.append(that.createUint(array, array.length - 1));
-      item.append(that.createArrayRemButton(item, array, array.length - 1));
-      button.before(item);
+      item.append(that.createArrayRemButton(array, array.length - 1));
+      $(this).parent().children(".items").append(item);
     });
     return e;
   }
-  createArrayRemButton(item, array, i) {
+  createArrayItems(array) {
+    let items = $(`<div class="items"></div>`);
+    for (let i in array) {
+      let item = $(`<div class="item"></div>`);
+      item.append(this.createUint(array, i));
+      item.append(this.createArrayRemButton(array, i));
+      items.append(item);
+    }
+    return items;
+  }
+  createArrayRemButton(array, i) {
     let e = $(String.raw`<div class="rem_button">
       <span>X</span>
     </div>`);
+    let that = this;
     e.click(function() {
-      //array.splice(i, 1);
+      array.splice(i, 1);
+      let valArray = $(this).closest(".val_array");
+      valArray.children(".items").remove();
+      valArray.children(".array_insert").before(that.createArrayItems(array));
     });
     return e;
   }
