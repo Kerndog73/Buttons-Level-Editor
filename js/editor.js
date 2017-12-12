@@ -16,6 +16,7 @@ $(document).ready(function() {
 
   $(window).resize(onWindowResize);
   onWindowResize();
+  setInterval(onWindowResize, 500);
 
   canvas.mouseleave(onMouseLeave);
   canvas.mousemove(onMouseMove);
@@ -50,10 +51,19 @@ function onWindowResize() {
   if (canvasRatio > canvasContainerRatio) {
     canvas.css("left", "0");//      accounting for the border of 4px     v
     canvas.css("top", (canvasContainer.height() - (canvasElementSize.y + 8)) / 2 + "px");
+    canvas.css("width", "100%");
+    canvas.css("height", "auto");
   } else {
     canvas.css("left", (canvasContainer.width() - (canvasElementSize.x + 8)) / 2 + "px");
     canvas.css("top", "0");
+    canvas.css("width", "auto");
+    canvas.css("height", "100%");
   }
+
+  // setting the size to auto or 100% will sometimes change the size of the
+  // canvas immediately
+  canvasElementSize.x = canvas.width();
+  canvasElementSize.y = canvas.height();
 }
 
 function onMouseLeave() {
