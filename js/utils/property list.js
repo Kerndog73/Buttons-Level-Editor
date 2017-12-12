@@ -37,7 +37,7 @@ class EntityElement {
   }
 
   createElement() {
-    return $(String.raw`<div class="entity">
+    return $(`<div class="entity">
       <div class="entity_name">
         <span>${spaceBeforeCaps(this.entity.name)}</span>
       </div>
@@ -131,21 +131,21 @@ class PropertiesElement {
   }
 
   createFloat(props, key) {
-    let e = $(String.raw`<input class="val_float" type="number" value="${props[key]}"/>`);
+    let e = $(`<input class="val_float" type="number" value="${props[key]}"/>`);
     e.change(function() {
       props[key] = e.val() * 1.0;
     });
     return e;
   }
   createUint(props, key) {
-    let e = $(String.raw`<input class="val_uint" type="number" min="0" step="1" value="${props[key]}" />`);
+    let e = $(`<input class="val_uint" type="number" min="0" step="1" value="${props[key]}" />`);
     e.change(function() {
       props[key] = Math.max(0, e.val()) | 0;
     });
     return e;
   }
   createVec(props, key) {
-    let e = $(String.raw`<div class="val_vec"></div>`);
+    let e = $(`<div class="val_vec"></div>`);
     e.append(this.createUint(props[key], "x"));
     e.append(this.createUint(props[key], "y"));
     return e;
@@ -154,17 +154,17 @@ class PropertiesElement {
     return this.createEnum(Orient, props, key).addClass("val_orient");
   }
   createString(props, key) {
-    let e = $(String.raw`<input class="val_string" type="text" value="${props[key]}" />`);
+    let e = $(`<input class="val_string" type="text" value="${props[key]}" />`);
     e.change(function() {
       props[key] = e.val();
     });
     return e;
   }
   createArray(props, key) {
-    let e = $(String.raw`<div class="val_array"></div>`);
+    let e = $(`<div class="val_array"></div>`);
     let array = props[key];
     e.append(this.createArrayItems(array));
-    let button = $(String.raw`<div class="array_insert button">
+    let button = $(`<div class="array_insert button">
       <span>Insert</span>
     </div>`);
     e.append(button);
@@ -189,7 +189,7 @@ class PropertiesElement {
     return items;
   }
   createArrayRemButton(array, i) {
-    let e = $(String.raw`<div class="rem_button">
+    let e = $(`<div class="rem_button">
       <span>X</span>
     </div>`);
     let that = this;
