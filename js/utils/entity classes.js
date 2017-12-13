@@ -30,7 +30,7 @@ class Entity {
     if (def !== undefined) {
       return def[0];
     } else {
-      console.error("Tried to get invalid property type", this);
+      console.error("Tried to get invalid property type", name, this);
       return PropType.NONE;
     }
   }

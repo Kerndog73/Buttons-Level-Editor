@@ -7,8 +7,8 @@ class Vec {
   }
 
   static fromArray(array) {
-    this.x = array[0];
-    this.y = array[1];
+    console.assert(array.length >= 2);
+    return new Vec(array[0], array[1]);
   }
 
   clone() {

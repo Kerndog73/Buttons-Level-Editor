@@ -53,7 +53,8 @@ function propertiesToString(entity) {
 }
 
 function propNameToString(propName) {
-  if (propName.includes(" ")) {
+  // `in` is a reserved keyword in JSONNET
+  if (propName.includes(" ") || propName == "in") {
     return "\"" + propName + "\"";
   } else {
     return propName;
@@ -107,7 +108,29 @@ function JSONNETtoEntities(jsonnet) {
 };` + jsonnet;
 
   const entityList = JSON.parse(JSONNETtoJSON(jsonnet));
-  console.log(entityList);
+  entities.entities = [];
+  properties.setList([]);
+  for (const [name, params] of entityList) {
+    const entity = FACTORIES[name]();
+    for (const paramName in params) {
+      const paramVal = params[paramName];
+      const type = entity.getPropType(paramName);
+      entity.props[paramName] = propFromJSON(type, paramVal);
+    }
+    entities.entities.push(entity);
+  }
+}
+
+function propFromJSON(type, json) {
+  if (type == PropType.VEC) {
+    return Vec.fromArray(json);
+  } else if (type == PropType.ORIENT) {
+    return Orient[json.toUpperCase()];
+  } else if (type == PropType.BOOL_OP) {
+    return BoolOp[json.toUpperCase()];
+  } else {
+    return json;
+  }
 }
 
 function JSONNETtoJSON(jsonnet) {
@@ -115,6 +138,7 @@ function JSONNETtoJSON(jsonnet) {
   const jsonnet_realloc = Module.cwrap('jsonnet_realloc', 'number', ['number', 'number', 'number']);
   const jsonnet_evaluate_snippet = Module.cwrap('jsonnet_evaluate_snippet', 'number', ['number', 'string', 'string', 'number']);
   const jsonnet_destroy = Module.cwrap('jsonnet_destroy', 'number', ['number']);
+
   const vm = jsonnet_make();
   const error_ptr = Module._malloc(4);
   const output_ptr = jsonnet_evaluate_snippet(vm, "snippet", jsonnet, error_ptr);
@@ -123,6 +147,7 @@ function JSONNETtoJSON(jsonnet) {
   const result = Module.Pointer_stringify(output_ptr);
   jsonnet_realloc(vm, output_ptr, 0);
   jsonnet_destroy(vm);
+
   if (error == 1) {
     console.log(result);
     alert("An error occured while converting JSONNET to JSON");
