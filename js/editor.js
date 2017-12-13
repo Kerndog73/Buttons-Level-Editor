@@ -94,7 +94,7 @@ function onMouseUp() {
 
 function setupCanvas() {
   canvasContainer = $("#editor");
-  canvas = $("#editor canvas");
+  canvas = canvasContainer.children();
   canvas.attr("width", PIXELS.x);
   canvas.attr("height", PIXELS.y);
   ctx = canvas[0].getContext("2d");
