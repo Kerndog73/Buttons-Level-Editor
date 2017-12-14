@@ -149,6 +149,7 @@
   margin: -4px;
 }
 .val_cell input:invalid {
+  box-shadow: none;
   border-radius: 12px;
   border-style: solid;
   border-width: 4px;
