@@ -103,14 +103,10 @@ function setupCanvas() {
 }
 
 function renderGrid() {
-  const transform = ctx.currentTransform;
-
+  ctx.save();
   ctx.scale(1.0 / TILE.x, 1.0 / TILE.y);
 
   ctx.beginPath();
-
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = "#FFF";
 
   for (let x = TILE.x; x < PIXELS.x; x += TILE.x) {
     ctx.moveTo(x, 0);
@@ -122,7 +118,8 @@ function renderGrid() {
     ctx.lineTo(PIXELS.x, y);
   }
 
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#FFF";
   ctx.stroke();
-
-  ctx.setTransform(transform.a, transform.b, transform.c, transform.d, transform.e, transform.f);
+  ctx.restore();
 }

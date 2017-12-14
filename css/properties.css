@@ -5,7 +5,7 @@
 }
 
 .entity_name {
-  font-size: 4em;
+  font-size: 3em;
 }
 .property, .insert_prop {
   font-size: 2em;
@@ -33,12 +33,14 @@
   background-color: #333;
 }
 
+
 .property {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   padding-bottom: 4px;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: calc(30% - 2px) calc(60% - 4px) calc(10% - 2px);
+  grid-gap: 4px;
 }
 
 /*
@@ -48,16 +50,7 @@
 */
 
 .key_cell {
-  width: calc(30% - 2px);
-}
-.val_cell {
-  width: calc(60% - 4px);
-}
-.rem_cell {
-  width: calc(10% - 2px);
-}
-
-.key_cell {
+  grid-column: 1;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -70,7 +63,12 @@
   overflow: scroll;
 }
 
+.val_cell {
+  grid-column: 2;
+}
+
 .rem_cell {
+  grid-column: 3;
   height: auto;
 }
 .rem_cell .rem_button {

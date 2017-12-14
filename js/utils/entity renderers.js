@@ -160,7 +160,7 @@ function renderLaserEmitter(ctx, props) {
     end.add(table[orient]);
     end.mul(scale);
 
-    const mat = ctx.currentTransform;
+    ctx.save();
     ctx.translate(-pos.x, -pos.y);
     ctx.scale(1.0 / scale.x, 1.0 / scale.y);
     ctx.beginPath();
@@ -169,7 +169,7 @@ function renderLaserEmitter(ctx, props) {
     ctx.lineWidth = 4;
     ctx.strokeStyle = "rgb(255, 0, 0)";
     ctx.stroke();
-    ctx.setTransform(mat.a, mat.b, mat.c, mat.d, mat.e, mat.f);
+    ctx.restore();
   }
 
   orientTransform(ctx, orient);
@@ -197,6 +197,6 @@ function renderText(ctx, props) {
   ctx.textBaseline = "middle";
   ctx.direction = "ltr";
   ctx.fillStyle = "rgb(255, 255, 255)";
-  ctx.scale(0.03, -0.03);
+  ctx.scale(0.02, -0.02);
   ctx.fillText(getOr(props, "text", ""), 0, 0);
 }

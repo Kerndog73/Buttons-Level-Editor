@@ -50,13 +50,13 @@ class Entity {
     }
   }
   render(ctx) {
-    const mat = ctx.currentTransform;
     const rect = this.getRect();
     const size = rect.size();
+    ctx.save();
     ctx.translate(rect.min.x, rect.min.y);
     ctx.scale(size.x, size.y);
     this.renderer(ctx, this.props);
-    ctx.setTransform(mat.a, mat.b, mat.c, mat.d, mat.e, mat.f);
+    ctx.restore();
   }
 };
 
