@@ -25,26 +25,48 @@ function createOption(name) {
   return $(`<option value="${name}">${name}</option>`)
 }
 
+class PropertyList {
+  constructor(element) {
+    this.element = element;
+    this.entities = [];
+  }
+
+  setList(entities) {
+    this.element.empty();
+    this.entities = entities.map(entity => new EntityElement(entity, this));
+    for (const entity of this.entities) {
+      this.element.append(entity.element);
+    }
+    this.update();
+  }
+
+  update() {
+    for (const entity of this.entities) {
+      entity.update();
+    }
+  }
+  removeEntity(entity) {
+    this.entities.splice(this.entities.indexOf(entity), 1);
+    entities.entities.splice(entities.entities.indexOf(entity), 1);
+  }
+};
+
 class EntityElement {
-  constructor(entity) {
+  constructor(entity, propList) {
     this.entity = entity;
-    this.element = this.createElement();
+    this.propList = propList;
+    this.element = $(`<div class="entity"></div>`);
+    this.header = new HeaderElement(entity, this);
     this.properties = new PropertiesElement(entity, this);
     this.inserter = new InserterElement(entity, this);
 
+    this.element.append(this.header.element);
     this.element.append(this.properties.element);
     this.element.append(this.inserter.element);
   }
 
-  createElement() {
-    return $(`<div class="entity">
-      <div class="entity_name">
-        <span>${spaceBeforeCaps(this.entity.name)}</span>
-      </div>
-    </div>`);
-  }
-
   update() {
+    this.header.update();
     this.properties.update();
     this.inserter.update();
   }
@@ -54,6 +76,44 @@ class EntityElement {
   }
   removeProperty(key) {
     this.inserter.removeProperty(key);
+  }
+  removeEntity() {
+    delete this.inserter;
+    delete this.properties;
+    delete this.header;
+    this.element.remove();
+    this.propList.removeEntity(this.entity);
+  }
+}
+
+class HeaderElement {
+  constructor(entity, entityElement) {
+    this.entity = entity;
+    this.entityElement = entityElement;
+    this.element = $(`<div class="header"></div>`);
+  }
+
+  update() {
+    this.element.empty();
+    this.element.append(this.makeName());
+    this.element.append(this.makeRemButton());
+  }
+
+  makeName() {
+    return $(`<div class="entity_name">
+      <span>${spaceBeforeCaps(this.entity.name)}</span>
+    </div>`);
+  }
+
+  makeRemButton() {
+    let e = $(`<div class="rem_button" title="Remove entity from level">
+      <span>X</span>
+    </div>`);
+    let that = this;
+    e.click(function() {
+      that.entityElement.removeEntity();
+    });
+    return e;
   }
 }
 
@@ -292,25 +352,3 @@ class InserterElement {
     select.append(createOption(key));
   }
 }
-
-class PropertyList {
-  constructor(element) {
-    this.element = element;
-    this.entities = [];
-  }
-
-  setList(entities) {
-    this.element.empty();
-    this.entities = entities.map(entity => new EntityElement(entity));
-    for (const entity of this.entities) {
-      this.element.append(entity.element);
-    }
-    this.update();
-  }
-
-  update() {
-    for (const entity of this.entities) {
-      entity.update();
-    }
-  }
-};

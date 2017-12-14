@@ -5,10 +5,22 @@
 }
 
 .entity_name {
-  font-size: 3em;
+  font-size: 4em;
 }
 .property, .insert_prop {
   font-size: 2em;
+}
+.header .rem_button {
+  font-size: 2em;
+}
+
+.entity > .header {
+  width: 100%;
+  margin-bottom: 4px;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: calc(90% - 2px) calc(10% - 2px);
+  grid-gap: 4px;
 }
 
 .entity {
@@ -23,8 +35,6 @@
 
 .entity_name {
   border-radius: 8px;
-  width: 100%;
-  margin-bottom: 4px;
   color: #FFF;
 }
 
@@ -32,7 +42,6 @@
   text-indent: 4px;
   background-color: #333;
 }
-
 
 .property {
   width: 100%;
@@ -120,21 +129,47 @@
 
 /*
 --------------------------------------------------------------------------------
----------------------------------  VALUES  -------------------------------------
+----------------------------------  INPUT  -------------------------------------
 --------------------------------------------------------------------------------
 */
 
 .val_cell input {
   border-radius: 8px;
+  border-collapse: collapse;
   font-size: inherit;
   text-indent: 4px;
   padding: 0;
   margin: 0;
-  border: 0;
+  border: none;
 }
 .val_cell input:focus {
-  outline: #00F solid 2px;
+  outline: none;
+  border: #00F solid 4px;
+  border-radius: 12px;
+  margin: -4px;
 }
+.val_cell input:invalid {
+  border-radius: 12px;
+  border-style: solid;
+  border-width: 4px;
+  margin: -4px;
+  animation: 500ms linear infinite alternate invalid_input;
+}
+
+@keyframes invalid_input {
+  from {
+    border-color: #000;
+  }
+  to {
+    border-color: #F00;
+  }
+}
+
+/*
+--------------------------------------------------------------------------------
+---------------------------------  VALUES  -------------------------------------
+--------------------------------------------------------------------------------
+*/
 
 /*-------------------------------  FLOAT  ------------------------------------*/
 .val_float,
