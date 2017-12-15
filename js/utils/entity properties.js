@@ -110,7 +110,8 @@ const rangeDef = new Map([
 const movingPlatformDef = new Map([
   ["size", [PropType.VEC, new Vec(1, 1)]],
   ["speed", [PropType.FLOAT, 1.0]],
-  ["waiting time", [PropType.FLOAT, 0.0]]
+  ["waiting time", [PropType.FLOAT, 0.0]],
+  ["piston", [PropType.BOOL, false]]
 ]);
 
 const detectorDef = new Map([
