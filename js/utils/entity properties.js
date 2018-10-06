@@ -119,6 +119,6 @@ const detectorDef = new Map([
 ]);
 
 const textDef = new Map([
-  ["font size", [PropType.UINT, 32]],
+  ["font scale", [PropType.UINT, 32]],
   ["text", [PropType.STRING, "This is some text"]]
 ]);

@@ -192,7 +192,9 @@ function renderLaserDetector(ctx, props) {
 
 function renderText(ctx, props) {
   ctx.beginPath();
-  ctx.font = getOr(props, "font size", 32) + "px Arial";
+  // 7/20 is number of tiles per character
+  // 50 is number of pixels per tile
+  ctx.font = (getOr(props, "font scale", 32) * 7/20 * 50) + "px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.direction = "ltr";
